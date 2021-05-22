@@ -20,11 +20,9 @@ namespace API.Extensions
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             //services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppIdentityContext>();
-<<<<<<< HEAD
+
             //services.AddIdentity<Student,IdentityRole>().AddEntityFrameworkStores<NkuContext>();
-           
-=======
->>>>>>> e4f5a0a46ad59d13fdd51563771133ef2fe70332
+            
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             services.Configure<ApiBehaviorOptions>(options =>
             {
