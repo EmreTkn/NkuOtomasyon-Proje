@@ -33,6 +33,8 @@ export default class App extends Component {
   };
 
   handleLogout = () => {
+    localStorage.removeItem("authToken")
+    localStorage.removeItem("authRole")
     this.setState({
       loggedIn: STATE_LOGGED_OUT,
       user: {},
