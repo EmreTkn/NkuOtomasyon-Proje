@@ -28,7 +28,7 @@ namespace API
         {
             services.AddDbContext<NkuContext>(x=>x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-            services.AddApplicationServices();
+            services.AddApplicationServices(Configuration);
             services.AddIdentityServices(Configuration);
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();

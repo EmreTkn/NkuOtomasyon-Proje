@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using API.Dtos;
+using API.Dtos.ResponseDto;
 using API.Errors;
 using API.Extensions;
 using AutoMapper;
@@ -9,7 +11,6 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace API.Controllers
 {
@@ -21,14 +22,16 @@ namespace API.Controllers
         private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<User> userManager,SignInManager<User> signInManager,ITokenService tokenService, IUnitOfWork unitOfWork, IMapper mapper)
+        public AccountController(UserManager<User> userManager,SignInManager<User> signInManager,ITokenService tokenService, IUnitOfWork unitOfWork, IMapper mapper, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _emailSender = emailSender;
         }
 
         [HttpPost("login")]
@@ -109,6 +112,58 @@ namespace API.Controllers
         public async Task<ActionResult<bool>> CheckEmailExistAsync([FromQuery] string email)
         {
             return await _userManager.FindByEmailAsync(email) != null;
+        }
+
+        [HttpPost("send-forgot-mail")]
+        public async Task<ActionResult<ApiResponse>> ForgotPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return new BadRequestObjectResult(new ApiResponse(400, "Lütfen mail adresinizi girerek tekrar deneyiniz!"));
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var url = $"http://localhost:3000/forgot-password?token={token}";
+
+                try
+                {
+                    await _emailSender.SendEmailAsync(email, "Parola Sıfırlama",
+                        $"Parola yenilemek için linke <a href='{url}'>tıklayınız</a>");
+                }
+                catch
+                {
+                    return new ApiResponse(500, "Mail gönderilirken bir hata oluştu. Lütfen tekrar deneyiniz.");
+                }
+            
+                return new ApiResponse(200, "Lütfen mail adresinizi kontrol ediniz");
+            }
+
+            return new ApiResponse(500);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<ActionResult<ApiResponse>> ResetPasswordAsync(ResetPasswordDto resetPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+
+            if (user == null)
+            {
+                return new ApiResponse(400, "Bu maile ait kullanıcı bulunamadı.");
+            }
+
+            var result =await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+
+            if (result.Succeeded)
+            {
+                return new ApiResponse(200, "Şifreniz başarılı bir şekilde değiştirildi.");
+            }
+
+            return new ApiResponse(500,"Şifrenizi yenilemek için lütfen yeni bir istek oluşturun.");
         }
 
         [Authorize]

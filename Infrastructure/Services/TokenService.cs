@@ -44,7 +44,6 @@ namespace Infrastructure.Services
             };
 
             var tokenHandler=new JwtSecurityTokenHandler();
-
             var token = tokenHandler.CreateToken(tokenDescription);
 
             return tokenHandler.WriteToken(token);

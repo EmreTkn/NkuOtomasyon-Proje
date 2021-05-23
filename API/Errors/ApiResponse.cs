@@ -18,6 +18,7 @@ namespace API.Errors
         {
             return statusCode switch
             {
+                200 => "İşlem başarılı bir şekilde yapıldı.",
                 400 => "Yanlış bir istekte bulunuldu.",
                 401 => "Sisteme giriş yapmalısınız.",
                 404 => "İstenilen sonuç bulunamadı.",

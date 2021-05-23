@@ -1,20 +1,31 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using API.Errors;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Extensions
 {
     public static class ApplicationServiceExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<ITokenService,TokenService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IEmailSender, SmtpEmailSender>(i =>
+                    new SmtpEmailSender(
+                        config["EmailSender:Host"],
+                        config.GetValue<int>("EmailSender:Port"),
+                        config.GetValue<bool>("EmailSender:EnableSSL"),
+                        config["EmailSender:UserName"],
+                        config["EmailSender:Password"])
+            );
             //services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppIdentityContext>();
 
             //services.AddIdentity<Student,IdentityRole>().AddEntityFrameworkStores<NkuContext>();

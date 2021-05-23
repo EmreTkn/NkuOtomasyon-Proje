@@ -19,8 +19,9 @@ namespace API.Extensions
             var builder = services.AddIdentityCore<User>();
 
             builder = new IdentityBuilder(builder.UserType, builder.Services);
-            builder.AddEntityFrameworkStores<AppIdentityContext>();
+            builder.AddEntityFrameworkStores<AppIdentityContext>().AddDefaultTokenProviders();
             builder.AddSignInManager<SignInManager<User>>();
+            
             services.AddDbContext<AppIdentityContext>(x => x.UseSqlite(config.GetConnectionString("IdentityConnection")));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -34,7 +35,6 @@ namespace API.Extensions
                         ValidateAudience = false
                     };
                 });
-
             return services;
         }
     }
