@@ -1,12 +1,8 @@
 ﻿using System.Linq;
 using API.Errors;
-using Core.Entities;
-using Core.Entities.Identity;
 using Core.Interfaces;
 using Infrastructure.Data;
-using Infrastructure.Identity;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 

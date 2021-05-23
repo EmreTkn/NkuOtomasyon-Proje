@@ -97,7 +97,7 @@ namespace API.Controllers
             await _unitOfWork.Complete();
 
             return new UserDto
-            {
+            {  
                 Email = user.Email,
                 SchoolNumber = user.UserName,
                 Type = user.Type,
