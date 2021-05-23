@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-export default class AdminPage extends Component {
+export default class Logout extends Component {
     render() {
         return (
             <div>
-                Admin
+                Çıkış Yapıldı
             </div>
         )
     }
