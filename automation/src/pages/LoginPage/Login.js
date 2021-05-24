@@ -55,13 +55,19 @@ export default class Login extends Component {
     }
 
      async componentDidMount(){
-        console.log(this.props.loggedIn)
+        console.log(this.props.loggedIn + "loginpage")
     }
 
 
     render() {
-        if (this.props.loggedIn === STATE_LOGGED_IN) {
-            return <Redirect to="/logout" />;
+        if (this.props.loggedIn === 0) {
+            return <Redirect to="/student" />;
+        }
+        else if (this.props.loggedIn === 1) {
+            return <Redirect to="/teacher" />;
+        }
+        else if (this.props.loggedIn === 2) {
+            return <Redirect to="/admin" />;
         }
         return (
             <div className="d-flex justify-content-center align-items-center login-height-100 text-center  bg-dark">
