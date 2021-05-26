@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { STATE_LOGGED_IN, STATE_LOGGED_OUT } from '../../App';
 import { Redirect } from 'react-router';
 import Sidebar from '../../components/Sidebar/Sidebar'
-import ChangePassword from '../../components/Student/ChangePassword/ChangePassword'
+import ChangePassword from '../../components/ChangePassword/ChangePassword'
 import {
     BrowserRouter as Router,
     Switch,
@@ -19,7 +19,7 @@ export default class StudentPage extends Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.loggedIn);      
+        // console.log(this.props.loggedIn);      
     }
     SwitchCase(props) {
         switch(props.value) {

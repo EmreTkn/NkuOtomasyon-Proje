@@ -1,16 +1,42 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router';
 
 export default class ChangePassword extends Component {
     constructor(props){
         super(props);
         this.state = {
-            email: '',
-            password: '',
+            email: ''
+        }
+    }
+    async handleForget(){
+        const {email} = this.state;
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({email: email})
+        };
+        
+        const response = await fetch(process.env.REACT_APP_BASE_URL+'account/send-forgot-mail', requestOptions);
+        if(response.ok){
+            const res = await response.json();
+            if(res.statusCode == 200){
+                alert(res.message)
+                this.props.history.push('/login');     
+            }
+            else{
+                alert(res.message)
+            }
+        }
+        else{
+            const res = await response.json();
+            alert(res.message)
         }
     }
     render() {
         return (
-            <div className="col-10 d-flex justify-content-center align-items-center login-height-100 text-center bg-dark">
+            <div className="col-12 d-flex justify-content-center align-items-center login-height-100 text-center bg-dark">
             <main className="form-signin">
                          <h1 className="h3 mb-3 fw-normal text-color-white">Lütfen Mail Adresinizi Yazınız</h1>
                          <div className="form-floating">
