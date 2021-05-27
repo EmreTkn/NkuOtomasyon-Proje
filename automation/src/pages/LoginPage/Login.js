@@ -32,6 +32,7 @@ export default class Login extends Component {
             const res = await response.json();
             localStorage.setItem("authToken", res.token)
             localStorage.setItem("authRole", res.type)
+            localStorage.setItem("authMail", res.email)
             this.handleSuccessfullAuth(res);
         }
         else{
@@ -55,13 +56,19 @@ export default class Login extends Component {
     }
 
      async componentDidMount(){
-        console.log(this.props.loggedIn)
+       
     }
 
 
     render() {
-        if (this.props.loggedIn === STATE_LOGGED_IN) {
-            return <Redirect to="/logout" />;
+        if (this.props.loggedIn === 0) {
+            return <Redirect to="/student" />;
+        }
+        else if (this.props.loggedIn === 1) {
+            return <Redirect to="/teacher" />;
+        }
+        else if (this.props.loggedIn === 2) {
+            return <Redirect to="/admin" />;
         }
         return (
             <div className="d-flex justify-content-center align-items-center login-height-100 text-center  bg-dark">
@@ -78,6 +85,7 @@ export default class Login extends Component {
                             <input type="password" className="form-control" id="floatingPassword" placeholder="Password"  onChange={(e) => this.setState({password:e.target.value})}></input>
                             <label htmlFor="floatingPassword">Şifre</label>
                         </div>
+                        <hr/>
                         <button className="btn btn-lg btn-secondary fw-bold border-white bg-white" type="submit"  onClick={(e) => this.handleLogin()} >Giriş Yap</button>
                 </main>
             </div>

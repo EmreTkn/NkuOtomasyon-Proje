@@ -1,0 +1,4 @@
+.studentPage{
+    min-height: 100vh !important;
+    min-height: -webkit-fill-available;
+}
