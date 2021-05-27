@@ -30,10 +30,14 @@ namespace API.Controllers
             
             var spec= new StudentWithIncludesSpecification(studentDto.SchoolNumber);
 
-            var spec2 = new StudentWithIncludesSpecification();
-
             var student = await _unitOfWork.Repository<Student>().GetWithSpec(spec);
-            student.Photo = _cloudinary.UploadPhoto(student.Id, studentDto.FormFile);  
+
+            var result =_cloudinary.UploadPhoto(student.Id, studentDto.FormFile);
+
+            if (result != null)
+            {
+                _unitOfWork.Repository<Photo>().Add(result.Result);
+            }
             return null;
         }
     }

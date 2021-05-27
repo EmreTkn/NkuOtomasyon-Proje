@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Core.Entities;
-using Core.Helpers;
+using Core.Entities.Configuration;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+
 
 namespace Infrastructure.Services
 {
@@ -19,28 +21,35 @@ namespace Infrastructure.Services
         {
             _cloudinaryConfig = cloudinaryConfig;
             _unitOfWork = unitOfWork;
-            Account account=new Account(_cloudinaryConfig.Value.CloudName,_cloudinaryConfig.Value.ApiKey,_cloudinaryConfig.Value.ApiSecret); //Daha öncesinde bir nesneye atanan veriler ile cloudinary account bilgileri oluşturuluyor.
+            Account account=new Account(_cloudinaryConfig.Value.CloudName,_cloudinaryConfig.Value.ApiKey,_cloudinaryConfig.Value.ApiSecret);
             _cloudinary=new Cloudinary(account);
         }
-        public  Photo UploadPhoto(string studentId, IFormFile formFile) //fotoğraf cloud'a yükleniyor.
+        public async Task<Photo> UploadPhoto(string studentId, IFormFile formFile)
         {
-            var file = formFile;
-            var uploadResult = new ImageUploadResult();
-            using (var stream=file.OpenReadStream())
+            try
             {
-                var uploadParams = new ImageUploadParams
+                var file = formFile;
+                ImageUploadResult uploadResult;
+                await using (var stream = file.OpenReadStream())
                 {
-                    File = new FileDescription(file.Name, stream)
-                };
-                uploadResult = _cloudinary.Upload(uploadParams);
-            }
-            var photo = new Photo();
-            photo.PublicId = uploadResult.PublicId;
-            photo.Url = uploadResult.Url.ToString();
-            photo.StudentId = studentId; 
-            _unitOfWork.Repository<Photo>().Add(photo); //Veriler eklendikten sonra daha önceden resim olup olmadığı kontrol edilecek.
-            return photo;
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.Name, stream)
+                    };
+                    uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                }
 
+                var photo = new Photo
+                {
+                    PublicId = uploadResult.PublicId, Url = uploadResult.Url.ToString(), StudentId = studentId
+                };
+
+                return photo;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

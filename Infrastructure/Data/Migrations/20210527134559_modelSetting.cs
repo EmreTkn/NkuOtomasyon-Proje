@@ -26,7 +26,8 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SemesterName = table.Column<string>(nullable: true)
+                    SemesterName = table.Column<string>(nullable: true),
+                    Year = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,23 +144,14 @@ namespace Infrastructure.Data.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
-                    TcNumber = table.Column<int>(nullable: false),
                     SchoolNumber = table.Column<string>(nullable: true),
-                    StudyProgramId = table.Column<int>(nullable: true),
-                    FacultyId = table.Column<int>(nullable: true),
                     RegistrationTime = table.Column<DateTime>(nullable: false),
-                    SemesterId = table.Column<int>(nullable: true)
+                    SemesterId = table.Column<int>(nullable: true),
+                    StudyProgramId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_Faculties_FacultyId",
-                        column: x => x.FacultyId,
-                        principalTable: "Faculties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Students_Semesters_SemesterId",
                         column: x => x.SemesterId,
@@ -183,8 +175,7 @@ namespace Infrastructure.Data.Migrations
                     LastName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     UserName = table.Column<string>(nullable: true),
-                    StudyProgramId = table.Column<int>(nullable: true),
-                    Type = table.Column<int>(nullable: false)
+                    StudyProgramId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -212,6 +203,35 @@ namespace Infrastructure.Data.Migrations
                     table.PrimaryKey("PK_Photos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Photos_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentPersonalityInformations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StudentId = table.Column<string>(nullable: true),
+                    TcNumber = table.Column<int>(nullable: false),
+                    Address = table.Column<string>(nullable: true),
+                    Birthday = table.Column<DateTime>(nullable: false),
+                    BirthCity = table.Column<string>(nullable: true),
+                    Nationality = table.Column<string>(nullable: true),
+                    MilitaryStatus = table.Column<bool>(nullable: false),
+                    MotherName = table.Column<string>(nullable: true),
+                    FatherName = table.Column<string>(nullable: true),
+                    Gender = table.Column<string>(nullable: false),
+                    MaritalStatus = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentPersonalityInformations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentPersonalityInformations_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
@@ -272,6 +292,67 @@ namespace Infrastructure.Data.Migrations
                         name: "FK_Lessons_Teachers_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentInformations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StudentId = table.Column<string>(nullable: true),
+                    EducationType = table.Column<string>(nullable: false),
+                    StudyTimeId = table.Column<int>(nullable: true),
+                    AdvisorTeacherId = table.Column<string>(nullable: true),
+                    GradeAverage = table.Column<double>(nullable: false),
+                    FacultyId = table.Column<int>(nullable: true),
+                    StudyProgramId = table.Column<int>(nullable: true),
+                    SemesterId = table.Column<int>(nullable: true),
+                    RecordType = table.Column<string>(nullable: false),
+                    ComeFromUniversity = table.Column<string>(nullable: true),
+                    ComeFromFaculty = table.Column<string>(nullable: true),
+                    ComeFromBranch = table.Column<string>(nullable: true),
+                    GraduationYear = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentInformations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentInformations_Teachers_AdvisorTeacherId",
+                        column: x => x.AdvisorTeacherId,
+                        principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentInformations_Faculties_FacultyId",
+                        column: x => x.FacultyId,
+                        principalTable: "Faculties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentInformations_Semesters_SemesterId",
+                        column: x => x.SemesterId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentInformations_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentInformations_StudyPrograms_StudyProgramId",
+                        column: x => x.StudyProgramId,
+                        principalTable: "StudyPrograms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentInformations_StudyTimes_StudyTimeId",
+                        column: x => x.StudyTimeId,
+                        principalTable: "StudyTimes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -418,9 +499,41 @@ namespace Infrastructure.Data.Migrations
                 column: "StudyProgramId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_FacultyId",
-                table: "Students",
+                name: "IX_StudentInformations_AdvisorTeacherId",
+                table: "StudentInformations",
+                column: "AdvisorTeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentInformations_FacultyId",
+                table: "StudentInformations",
                 column: "FacultyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentInformations_SemesterId",
+                table: "StudentInformations",
+                column: "SemesterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentInformations_StudentId",
+                table: "StudentInformations",
+                column: "StudentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentInformations_StudyProgramId",
+                table: "StudentInformations",
+                column: "StudyProgramId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentInformations_StudyTimeId",
+                table: "StudentInformations",
+                column: "StudyTimeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentPersonalityInformations_StudentId",
+                table: "StudentPersonalityInformations",
+                column: "StudentId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_SemesterId",
@@ -466,6 +579,12 @@ namespace Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "StudentAffairs");
+
+            migrationBuilder.DropTable(
+                name: "StudentInformations");
+
+            migrationBuilder.DropTable(
+                name: "StudentPersonalityInformations");
 
             migrationBuilder.DropTable(
                 name: "StudyLessons");

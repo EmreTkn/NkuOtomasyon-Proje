@@ -1,11 +1,10 @@
-﻿
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
     public enum Types
     {
-        [EnumMember(Value = "Student")]
+        [EnumMember(Value = nameof(Entities.Student))]
         Student,
         [EnumMember(Value = "Teacher")]
         Teacher,

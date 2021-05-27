@@ -27,6 +27,8 @@ namespace Infrastructure.Data
         public DbSet<StudyTime> StudyTimes { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<StudentAffairs> StudentAffairs { get; set; }
+        public DbSet<StudentInformation> StudentInformations { get; set; }
+        public DbSet<StudentPersonalityInformation> StudentPersonalityInformations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -67,6 +69,40 @@ namespace Infrastructure.Data
             {
                 i.LessonCode
             });
+        
+
+            modelBuilder.Entity<Student>()
+                .HasOne(p => p.Information)
+                .WithOne(p => p.Student);
+               
+            modelBuilder.Entity<Student>()
+                .HasOne(p => p.PersonalityInformation)
+                .WithOne(p => p.Student);
+
+               
+
+            
+
+            modelBuilder.Entity<Semester>()
+                .Property(s => s.Year)
+                .HasConversion(o => o.ToString(),
+                    o => (CurrentYear) Enum.Parse(typeof(CurrentYear), o));
+            modelBuilder.Entity<StudentPersonalityInformation>()
+                .Property(s => s.Gender)
+                .HasConversion(o => o.ToString(),
+                    o => (Gender) Enum.Parse(typeof(Gender), o));
+            modelBuilder.Entity<StudentPersonalityInformation>()
+                .Property(s => s.MaritalStatus)
+                .HasConversion(o => o.ToString(),
+                    o => (MaritalStatus)Enum.Parse(typeof(MaritalStatus), o));
+            modelBuilder.Entity<StudentInformation>()
+                .Property(s => s.EducationType)
+                .HasConversion(o => o.ToString(),
+                    o => (EducationType)Enum.Parse(typeof(EducationType), o));
+            modelBuilder.Entity<StudentInformation>()
+                .Property(s => s.RecordType)
+                .HasConversion(o => o.ToString(),
+                    o => (RecordType)Enum.Parse(typeof(RecordType), o));
             //modelBuilder.Entity<Student>()
             //    .Property(s => s.Type)
             //    .HasConversion(o => o.ToString(), 

@@ -1,10 +1,11 @@
-﻿using Core.Entities;
+﻿using System.Threading.Tasks;
+using Core.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace Core.Interfaces
 {
    public interface ICloudinaryService
    {
-       Photo UploadPhoto(string id, IFormFile formFile);
+       Task<Photo> UploadPhoto(string id, IFormFile formFile);
    }
 }

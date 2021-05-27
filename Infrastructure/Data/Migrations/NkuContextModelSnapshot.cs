@@ -225,6 +225,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("SemesterName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Year")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Semesters");
@@ -238,9 +242,6 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("TEXT");
 
@@ -248,9 +249,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("FacultyId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
@@ -295,9 +293,6 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("StudyProgramId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TcNumber")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
@@ -305,8 +300,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FacultyId");
 
                     b.HasIndex("SemesterId");
 
@@ -342,6 +335,120 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("StudyProgramId");
 
                     b.ToTable("StudentAffairs");
+                });
+
+            modelBuilder.Entity("Core.Entities.StudentInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AdvisorTeacherId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ComeFromBranch")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ComeFromFaculty")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ComeFromUniversity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EducationType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("FacultyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("GradeAverage")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("GraduationYear")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RecordType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SemesterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("StudyProgramId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("StudyTimeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvisorTeacherId");
+
+                    b.HasIndex("FacultyId");
+
+                    b.HasIndex("SemesterId");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.HasIndex("StudyProgramId");
+
+                    b.HasIndex("StudyTimeId");
+
+                    b.ToTable("StudentInformations");
+                });
+
+            modelBuilder.Entity("Core.Entities.StudentPersonalityInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BirthCity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FatherName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MaritalStatus")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("MilitaryStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MotherName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nationality")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TcNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.ToTable("StudentPersonalityInformations");
                 });
 
             modelBuilder.Entity("Core.Entities.StudyLesson", b =>
@@ -414,9 +521,6 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("StudyProgramId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
@@ -484,15 +588,11 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Student", b =>
                 {
-                    b.HasOne("Core.Entities.Faculty", "Faculty")
-                        .WithMany()
-                        .HasForeignKey("FacultyId");
-
-                    b.HasOne("Core.Entities.Semester", "Semester")
+                    b.HasOne("Core.Entities.Semester", null)
                         .WithMany("Students")
                         .HasForeignKey("SemesterId");
 
-                    b.HasOne("Core.Entities.StudyProgram", "StudyProgram")
+                    b.HasOne("Core.Entities.StudyProgram", null)
                         .WithMany("Students")
                         .HasForeignKey("StudyProgramId");
                 });
@@ -506,6 +606,40 @@ namespace Infrastructure.Data.Migrations
                     b.HasOne("Core.Entities.StudyProgram", "StudyProgram")
                         .WithMany()
                         .HasForeignKey("StudyProgramId");
+                });
+
+            modelBuilder.Entity("Core.Entities.StudentInformation", b =>
+                {
+                    b.HasOne("Core.Entities.Teacher", "AdvisorTeacher")
+                        .WithMany()
+                        .HasForeignKey("AdvisorTeacherId");
+
+                    b.HasOne("Core.Entities.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("FacultyId");
+
+                    b.HasOne("Core.Entities.Semester", "Semester")
+                        .WithMany()
+                        .HasForeignKey("SemesterId");
+
+                    b.HasOne("Core.Entities.Student", "Student")
+                        .WithOne("Information")
+                        .HasForeignKey("Core.Entities.StudentInformation", "StudentId");
+
+                    b.HasOne("Core.Entities.StudyProgram", "StudyProgram")
+                        .WithMany()
+                        .HasForeignKey("StudyProgramId");
+
+                    b.HasOne("Core.Entities.StudyTime", "StudyTime")
+                        .WithMany()
+                        .HasForeignKey("StudyTimeId");
+                });
+
+            modelBuilder.Entity("Core.Entities.StudentPersonalityInformation", b =>
+                {
+                    b.HasOne("Core.Entities.Student", "Student")
+                        .WithOne("PersonalityInformation")
+                        .HasForeignKey("Core.Entities.StudentPersonalityInformation", "StudentId");
                 });
 
             modelBuilder.Entity("Core.Entities.StudyLesson", b =>

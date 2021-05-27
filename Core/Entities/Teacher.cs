@@ -12,6 +12,5 @@ namespace Core.Entities
         public string UserName { get; set; }
         public List<Lesson> Lessons { get; set; }
         public StudyProgram StudyProgram { get; set; }
-        public Types Type { get; set; } = Types.Teacher;
     }
 }

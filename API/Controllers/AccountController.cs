@@ -79,6 +79,8 @@ namespace API.Controllers
                 Type = registerDto.Type
             };
 
+
+
             var result =await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded)
             {

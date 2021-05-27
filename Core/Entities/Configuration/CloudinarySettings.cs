@@ -1,5 +1,6 @@
-﻿
-namespace Core.Helpers
+﻿namespace Core.Entities.Configuration
+
+
 {
     public class CloudinarySettings
     {

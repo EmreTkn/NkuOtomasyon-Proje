@@ -17,7 +17,7 @@ namespace Core.Entities
         public Classroom LessonClassRoom { get; set; }
         public Classroom ExamClassRoom { get; set; }
         public DateTime StudyTime { get; set; }
-        public string LessonDay { get; set; } //this and 3 lines below it needs to set a new table
+        public string LessonDay { get; set; }
         public int LessonStartHour { get; set; }
         public int LessonofNumber { get; set; }
         public Teacher Teacher { get; set; }

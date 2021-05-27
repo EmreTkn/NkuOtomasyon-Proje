@@ -1,7 +1,8 @@
 using API.Extensions;
+using API.Helpers;
 using API.Middleware;
 using AutoMapper;
-using Core.Helpers;
+using Core.Entities.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
