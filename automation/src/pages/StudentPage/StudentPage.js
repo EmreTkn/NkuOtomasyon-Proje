@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import { STATE_LOGGED_IN, STATE_LOGGED_OUT } from '../../App';
 import { Redirect } from 'react-router';
 import Sidebar from '../../components/Sidebar/Sidebar'
 import ChangePassword from '../../components/ChangePassword/ChangePassword'
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route
-  } from "react-router-dom";
+import OzlukBilgileri from '../../components/Student/OzlukBilgileri/OzlukBilgileri'
+import OgrenimBilgileri from '../../components/Student/OgrenimBilgileri/OgrenimBilgileri'
+
 import './StudentPage.css';
 
 export default class StudentPage extends Component {
@@ -25,6 +22,10 @@ export default class StudentPage extends Component {
         switch(props.value) {
           case 'sifredegistir':
             return <ChangePassword></ChangePassword>;
+            case 'ozlukbilgilerim':
+                return <OzlukBilgileri  user={props.user}></OzlukBilgileri>;
+            case 'ogrenimbilgilerim':
+                return <OgrenimBilgileri  user={props.user}></OgrenimBilgileri>;     
           default:
             return 'Hoşgeldiniz';
         }
@@ -36,7 +37,9 @@ export default class StudentPage extends Component {
         return (
             <div className={"studentPage d-flex"}>
                 <Sidebar userName={this.state.userName} sidebarContent={this.props.sidebar}></Sidebar>
-                <this.SwitchCase value={this.props.contentPage}></this.SwitchCase>
+                <div className={"col-10 login-height-100"}>
+                <this.SwitchCase value={this.props.contentPage} user={this.props.user}></this.SwitchCase>
+                </div>
             </div>
         )
     }

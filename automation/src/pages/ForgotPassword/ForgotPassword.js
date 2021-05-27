@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import logo from "../../images/logo.png"
-import { Redirect } from 'react-router';
 import queryString from 'query-string'
 
 export default class ForgotPassword extends Component {

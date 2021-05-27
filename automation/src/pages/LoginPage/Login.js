@@ -1,23 +1,18 @@
 import React, { Component } from 'react'
 import './Login.css';
 import logo from "../../images/logo.png"
-import { STATE_LOGGED_IN, STATE_LOGGED_OUT } from '../../App';
 import { Redirect } from 'react-router';
 export default class Login extends Component {
-
-    
-
     constructor(props){
         super(props);
         this.state = {
             email: '',
             password: '',
             role:'',
-            loginData:[]
         }
     }
     async handleLogin(){
-        const {email,password,loginData} = this.state;
+        const {email,password} = this.state;
         const requestOptions = {
             method: 'POST',
             headers: { 
@@ -61,13 +56,13 @@ export default class Login extends Component {
 
 
     render() {
-        if (this.props.loggedIn === 0) {
+        if (this.props.loggedIn == 0) {
             return <Redirect to="/student" />;
         }
-        else if (this.props.loggedIn === 1) {
+        else if (this.props.loggedIn == 1) {
             return <Redirect to="/teacher" />;
         }
-        else if (this.props.loggedIn === 2) {
+        else if (this.props.loggedIn == 2) {
             return <Redirect to="/admin" />;
         }
         return (
