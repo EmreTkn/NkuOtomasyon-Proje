@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using API.Dtos.ResponseDto;
+using API.Errors;
 using API.Extensions;
 using AutoMapper;
 using Core.Entities;
@@ -25,25 +26,34 @@ namespace API.Controllers
         }
 
         [HttpGet("get-information")]
-        public async Task<EducationInformationDto> GetStudentEducationInformation()
+        public async Task<ActionResult<EducationInformationDto>> GetStudentEducationInformation()
         {
             var user =await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
+
+            if (user == null) return BadRequest(new ApiResponse(400, "Kullanıcı bulunamadı."));
+
+
             var spec = new StudentEducationInformationSpecification(user.Id);
 
-            var result = await _unitOfWork.Repository<StudentInformation>().GetWithSpec(spec);
+            var result = await _unitOfWork
+                .Repository<StudentInformation>().GetWithSpec(spec);
 
-            return _mapper.Map<EducationInformationDto>(result);
+            return Ok(_mapper.Map<EducationInformationDto>(result));
         }
 
         [HttpGet("get-personal-information")]
-        public async Task<PersonalInformationDto> GetStudentPersonalInformation()
+        public async Task<ActionResult<PersonalInformationDto>> GetStudentPersonalInformation()
         {
             var user = await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
+
+            if (user == null) return BadRequest(new ApiResponse(400, "Kullanıcı bulunamadı."));
+
             var spec = new StudentPersonalInformationSpecification(user.Id);
 
-            var result = await _unitOfWork.Repository<StudentPersonalityInformation>().GetWithSpec(spec);
+            var result = await _unitOfWork.
+                Repository<StudentPersonalityInformation>().GetWithSpec(spec);
 
-            return _mapper.Map<PersonalInformationDto>(result);
+            return Ok(_mapper.Map<PersonalInformationDto>(result));
         }
     }
 }

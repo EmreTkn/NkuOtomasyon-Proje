@@ -13,7 +13,8 @@ namespace Core.Specification
         }
         public StudentWithIncludesSpecification(string schoolNumber) : base(u => u.SchoolNumber == schoolNumber)
         {
-           
+           AddInclude(x => x.Information);
+           AddInclude(x => x.Information.Semester);
         }
     }
 }
