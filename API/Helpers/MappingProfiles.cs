@@ -1,4 +1,5 @@
-﻿using API.Dtos;
+﻿using System.Linq;
+using API.Dtos;
 using API.Dtos.RequestDto;
 using API.Dtos.ResponseDto;
 using AutoMapper;
@@ -56,11 +57,38 @@ namespace API.Helpers
                 .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.Lesson.LessonName))
                 .ForMember(dst => dst.PracticeTime, opt => opt.MapFrom(src => src.Lesson.PracticeTime))
                 .ForMember(dst => dst.TheoryTime, opt => opt.MapFrom(src => src.Lesson.TheoryTime))
-                .ForMember(dst => dst.Letter, opt => opt.MapFrom<LetterResolver>())
-                .ForMember(dst => dst.LetterGrade, opt => opt.MapFrom<LetterGradeResolver>())
+                .ForMember(dst => dst.Letter, opt => opt.MapFrom<LetterResolver<GradeCardDto>>())
+                .ForMember(dst => dst.LetterGrade, opt => opt.MapFrom<LetterGradeResolver<GradeCardDto>>())
                 .ForMember(dst => dst.Semester, opt => opt.MapFrom(src => src.Lesson.Semester.Id))
                 .ForMember(dst => dst.LessonYear, opt => opt.MapFrom(src => src.Lesson.Semester.Year));
+            CreateMap<Lesson, CurriculumGradeCardDto>()
+                .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.LessonName))
+                .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.LessonCode))
+                .ForMember(dst => dst.LessonType, opt => opt.MapFrom(src => src.LessonType))
+                .ForMember(dst => dst.Akts, opt => opt.MapFrom(src => src.Akts))
+                .ForMember(dst => dst.SuccessStatus, opt => opt.MapFrom(src => LessonStatus.Unregistered));
 
+            CreateMap<Grade, CurriculumGradeCardDto>()
+                .ForMember(dst => dst.GradesAverage, opt => opt.MapFrom(src => src.Average))
+                .ForMember(dst => dst.Letter, opt => opt.MapFrom<LetterResolver<CurriculumGradeCardDto>>())
+                .ForMember(dst => dst.LetterGrade, opt => opt.MapFrom<LetterGradeResolver<CurriculumGradeCardDto>>())
+                .ForMember(dst => dst.NumberOfLessonTaken, opt => opt.MapFrom(src => src.NumberOfLessonTaken))
+                .ForMember(dst => dst.LessonStatus, opt => opt.MapFrom<LessonStatusResolver>())
+                .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.Lesson.LessonName))
+                .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.Lesson.LessonCode))
+                .ForMember(dst => dst.LessonType, opt => opt.MapFrom(src => src.Lesson.LessonType))
+                .ForMember(dst => dst.Akts, opt => opt.MapFrom(src => src.Lesson.Akts))
+                .ForMember(dst => dst.SuccessStatus, opt => opt.MapFrom<LessonStatusResolver>())
+                .ForMember(dst => dst.StatusAbsenteeism, opt => opt.MapFrom(src => src.FailedAbsenteeism));
+
+            CreateMap<Lesson, LessonDateDto>()
+                .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.LessonCode))
+                .ForMember(dst => dst.LessonCount, opt => opt.MapFrom(src => src.LessonofNumber))
+                .ForMember(dst => dst.LessonDay, opt => opt.MapFrom<LessonDayResolver>())
+                .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.LessonName))
+                .ForMember(dst => dst.LessonStartHour, opt => opt.MapFrom(src => src.LessonStartHour))
+                .ForMember(dst => dst.TeacherName,
+                    opt => opt.MapFrom(src => src.Teacher.FirstName + src.Teacher.LastName));
         }
     }
 }

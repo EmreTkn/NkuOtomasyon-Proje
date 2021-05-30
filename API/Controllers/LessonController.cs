@@ -9,6 +9,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
+using Core.Specification.LessonSpecs;
 using Core.Specification.StudentSpecs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -71,5 +72,57 @@ namespace API.Controllers
             return BadRequest(new ApiResponse(400, "Kullanıcı bulunamadı."));
         }
 
+        [HttpGet("get-curriculum-card")]
+        public async Task<ActionResult<IReadOnlyList<CurriculumGradeCardDto>>> GetCurriculumCardAsync()
+        {
+            var user = await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
+            
+            if (user != null)
+            {
+                List<CurriculumGradeCardDto> result = new List<CurriculumGradeCardDto>();
+                var educationSpec = new StudentEducationInformationSpecification(user.Id);
+                var educationInformation = await _unitOfWork.Repository<StudentInformation>().GetWithSpec(educationSpec);
+                var semesterSpec = new LessonsBySemesterIdSpecification(educationInformation.Semester.Id);
+                
+
+                var studentGradesSpec = new StudentGradesSpecification(user.Id);
+                var studentGrades =
+                    (await _unitOfWork.Repository<Grade>().ListAsync(studentGradesSpec)).Select(
+                        _mapper.Map<CurriculumGradeCardDto>).ToList();
+                result.AddRange(studentGrades);
+
+                var semesterLessons = await _unitOfWork.Repository<Lesson>().ListAsync(semesterSpec);
+                foreach (var item in semesterLessons)
+                {
+                    var data = studentGrades.FirstOrDefault(x => x.LessonCode == item.LessonCode);
+                    if (data == null)
+                    {
+                       result.Add(_mapper.Map<CurriculumGradeCardDto>(item)); 
+                    }
+
+                }
+                return result;
+            }
+
+            return BadRequest(new ApiResponse(400, "Giriş yaparak tekrar deneyiniz."));
+        }
+
+        [HttpGet("get-lessons-dates")]
+        public async Task<ActionResult<IReadOnlyList<LessonDateDto>>> GetLessonDatesAsync()
+        { 
+            var user = await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
+            
+            if(user == null) return BadRequest(new ApiResponse(400, "Giriş yaparak tekrar deneyiniz."));
+
+            var educationSpec = new StudentEducationInformationSpecification(user.Id);
+            var educationInformation = await _unitOfWork.Repository<StudentInformation>().GetWithSpec(educationSpec);
+
+            var lessonsSpec = new SyllabusSpecification(user.Id, educationInformation.Semester.Id);
+            var lessons = (await _unitOfWork.Repository<StudyLesson>().ListAsync(lessonsSpec))
+                .Select(sl => sl.Lesson)
+                .Select(_mapper.Map<LessonDateDto>).ToList();
+
+            return Ok(lessons);
+        }
     }
 }

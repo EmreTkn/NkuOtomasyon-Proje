@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(NkuContext))]
-    partial class NkuContextModelSnapshot : ModelSnapshot
+    [Migration("20210529164207_AddLessonTypeFromLessons,")]
+    partial class AddLessonTypeFromLessons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,8 +119,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("LessonClassRoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LessonDay")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("LessonDay")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LessonName")
                         .HasColumnType("TEXT");
