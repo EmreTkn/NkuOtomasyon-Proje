@@ -5,7 +5,7 @@ export default class DonemDersKarnemElement extends Component {
         return (
             <div>
                 <div className="navbar navbar-dark bg-dark shadow-sm w-100 text-white pt-8 align-items-center d-flex justify-content-center border-bottom  border-white">
-                         {this.props.element[1].lessonYear} {this.props.element[1].semester % 2 === 1 ? '1. Dönem' : '2. Dönem'}
+                    {this.props.element[0].lessonYear} {this.props.element[0].semester % 2 === 1 ? '1. Dönem' : '2. Dönem'}
                 </div>
                 <div className="table-responsive">
                             <table className="table table-striped table-sm text-white">
@@ -47,7 +47,7 @@ export default class DonemDersKarnemElement extends Component {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>Puan: {this.props.element[1].semesterGrade === null ? '0,00' : this.props.element[1].semesterGrade }</td>                   
+                <td>Puan: {this.props.element[0].semesterGrade === null ? '0,00' : this.props.element[0].semesterGrade }</td>                   
                  </tr>
                 </tfoot>
                 </table>
