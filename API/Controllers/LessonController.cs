@@ -10,7 +10,6 @@ using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
 using Core.Specification.LessonSpecs;
-using Core.Specification.SemesterSpecs;
 using Core.Specification.StudentSpecs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -108,5 +107,22 @@ namespace API.Controllers
             return BadRequest(new ApiResponse(400, "Giriş yaparak tekrar deneyiniz."));
         }
 
+        [HttpGet("get-lessons-dates")]
+        public async Task<ActionResult<IReadOnlyList<LessonDateDto>>> GetLessonDatesAsync()
+        { 
+            var user = await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
+            
+            if(user == null) return BadRequest(new ApiResponse(400, "Giriş yaparak tekrar deneyiniz."));
+
+            var educationSpec = new StudentEducationInformationSpecification(user.Id);
+            var educationInformation = await _unitOfWork.Repository<StudentInformation>().GetWithSpec(educationSpec);
+
+            var lessonsSpec = new SyllabusSpecification(user.Id, educationInformation.Semester.Id);
+            var lessons = (await _unitOfWork.Repository<StudyLesson>().ListAsync(lessonsSpec))
+                .Select(sl => sl.Lesson)
+                .Select(_mapper.Map<LessonDateDto>).ToList();
+
+            return Ok(lessons);
+        }
     }
 }

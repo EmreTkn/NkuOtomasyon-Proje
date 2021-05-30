@@ -80,6 +80,15 @@ namespace API.Helpers
                 .ForMember(dst => dst.Akts, opt => opt.MapFrom(src => src.Lesson.Akts))
                 .ForMember(dst => dst.SuccessStatus, opt => opt.MapFrom<LessonStatusResolver>())
                 .ForMember(dst => dst.StatusAbsenteeism, opt => opt.MapFrom(src => src.FailedAbsenteeism));
+
+            CreateMap<Lesson, LessonDateDto>()
+                .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.LessonCode))
+                .ForMember(dst => dst.LessonCount, opt => opt.MapFrom(src => src.LessonofNumber))
+                .ForMember(dst => dst.LessonDay, opt => opt.MapFrom<LessonDayResolver>())
+                .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.LessonName))
+                .ForMember(dst => dst.LessonStartHour, opt => opt.MapFrom(src => src.LessonStartHour))
+                .ForMember(dst => dst.TeacherName,
+                    opt => opt.MapFrom(src => src.Teacher.FirstName + src.Teacher.LastName));
         }
     }
 }
