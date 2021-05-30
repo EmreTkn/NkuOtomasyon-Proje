@@ -4,9 +4,9 @@ using Core.Entities;
 
 namespace API.Helpers
 {
-    public class LetterGradeResolver : IValueResolver<Grade,GradeCardDto,double?>
+    public class LetterGradeResolver<T> : IValueResolver<Grade,T,double?> where T:GradeDto
     {
-        public double? Resolve(Grade source, GradeCardDto destination, double? destMember, ResolutionContext context)
+        public double? Resolve(Grade source, T destination, double? destMember, ResolutionContext context)
         {
             if (!string.IsNullOrEmpty(destination.Letter))
             {

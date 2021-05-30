@@ -10,6 +10,7 @@ namespace Core.Entities
         public int TheoryTime { get; set; }
         public int PracticeTime { get; set; }
         public string LessonName { get; set; }
+        public bool LessonType { get; set; }
         public DateTime ExamDate { get; set; }
         public DateTime MidTermTime { get; set; }
         public DateTime FinalExamTime { get; set; }

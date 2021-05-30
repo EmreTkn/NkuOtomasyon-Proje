@@ -4,45 +4,36 @@ using Core.Entities;
 
 namespace API.Helpers
 {
-    public class LetterResolver : IValueResolver<Grade,GradeCardDto,string>
+    public class LetterResolver<T> : IValueResolver<Grade,T,string>
     {
-        public string Resolve(Grade source, GradeCardDto destination, string destMember, ResolutionContext context)
+        public string Resolve(Grade source, T destination, string destMember, ResolutionContext context)
         {
             if (source.Average != null)
             {
                 switch (source.Average)
                 {
                     case { } n when  n <= 100 && n >= 90:
-                        destination.Letter = "AA";
-                        break;
+                       return "AA";
                     case { } n when n <= 89 && n >= 80:
-                        destination.Letter = "BA";
-                        break;
+                        return "BA";
                     case { } n when n <= 79 && n >= 70:
-                        destination.Letter = "BB";
-                        break;
+                        return "BB";
                     case { } n when n <= 69 && n >= 65:
-                        destination.Letter = "BC";
-                        break;
+                        return "BC";
                     case { } n when n <= 64 && n >= 60:
-                        destination.Letter = "CC";
-                        break;
+                        return "CC";
                     case { } n when n <= 59 && n >= 50:
-                        destination.Letter = "DD";
-                        break;
+                        return "DD";
                     case { } n when n <= 49 && n >= 30:
-                        destination.Letter = "FD";
-                        break;
+                        return "FD";
                     case { } n when n <= 29 && n == 0:
-                        destination.Letter = "FF";
-                        break;
+                        return "FF";
                     default:
-                        destination.Letter = null;
-                        break;
+                        return null;
                 }
             }
 
-            return destination.Letter;
+            return null;
         }
     }
 }
