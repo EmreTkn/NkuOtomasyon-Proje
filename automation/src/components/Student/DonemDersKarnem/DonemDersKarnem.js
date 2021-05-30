@@ -43,7 +43,7 @@ export default class DonemDersKarnem extends Component {
         return (
             <div className="h-100 bg-dark text-white">
                 {Object.values(this.state.userLessonData).map((semester) =>
-                <DonemDersKarnemElement element={semester}></DonemDersKarnemElement>
+                <DonemDersKarnemElement key={semester[0].semester+semester[0].lessonCode} element={semester}></DonemDersKarnemElement>
                 )}
             </div>     
         )

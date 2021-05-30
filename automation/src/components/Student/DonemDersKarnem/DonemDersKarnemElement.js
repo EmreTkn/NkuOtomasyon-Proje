@@ -24,7 +24,7 @@ export default class DonemDersKarnemElement extends Component {
                             </thead>
                             <tbody>
                         {Object.values(this.props.element).map((donem) =>
-                                <tr className="text-white" >
+                                <tr key={donem.semester+donem.lessonCode} className="text-white" >
                                 <td>{donem.lessonCode}</td>
                                 <td>{donem.lessonName}</td>
                                 <td>{donem.teacherName}</td>
