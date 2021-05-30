@@ -17,5 +17,6 @@ namespace API.Dtos.ResponseDto
         public int? GradesAverage { get; set; }
         public bool? StatusAbsenteeism { get; set; }
         public LessonStatus SuccessStatus { get; set; }
+        public int Semester { get; set; }
     }
 }

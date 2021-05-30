@@ -18,16 +18,18 @@ namespace API.Controllers
 {
     public class LessonController : BaseApiController
     {
-        private IUnitOfWork _unitOfWork;
-        private IMapper _mapper;
-        private UserManager<User> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
+        private IStudentService _studentService;
 
 
-        public LessonController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
+        public LessonController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager, IStudentService studentService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userManager = userManager;
+            _studentService = studentService;
         }
 
         [HttpPost("add")]
@@ -80,8 +82,8 @@ namespace API.Controllers
             if (user != null)
             {
                 List<CurriculumGradeCardDto> result = new List<CurriculumGradeCardDto>();
-                var educationSpec = new StudentEducationInformationSpecification(user.Id);
-                var educationInformation = await _unitOfWork.Repository<StudentInformation>().GetWithSpec(educationSpec);
+
+                var educationInformation = await _studentService.GetStudentInformation(HttpContext.User);
                 var semesterSpec = new LessonsBySemesterIdSpecification(educationInformation.Semester.Id);
                 
 
@@ -112,15 +114,46 @@ namespace API.Controllers
         { 
             var user = await _userManager.FindByEmailFromClaimsPrinciple(HttpContext.User);
             
-            if(user == null) return BadRequest(new ApiResponse(400, "Giriş yaparak tekrar deneyiniz."));
+            if(user == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
 
-            var educationSpec = new StudentEducationInformationSpecification(user.Id);
-            var educationInformation = await _unitOfWork.Repository<StudentInformation>().GetWithSpec(educationSpec);
+            var educationInformation = await _studentService.GetStudentInformation(HttpContext.User);
 
             var lessonsSpec = new SyllabusSpecification(user.Id, educationInformation.Semester.Id);
             var lessons = (await _unitOfWork.Repository<StudyLesson>().ListAsync(lessonsSpec))
                 .Select(sl => sl.Lesson)
                 .Select(_mapper.Map<LessonDateDto>).ToList();
+
+            return Ok(lessons);
+        }
+
+        [HttpGet("get-mid-exam")]
+        public async Task<ActionResult<IReadOnlyList<MidExamDto>>> GetMidExamDateAsync()
+        {
+            var educationInformation = await _studentService.GetStudentInformation(HttpContext.User);
+
+            if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
+
+            var lessonsSpec = new StudentLessonsSpecification(educationInformation.StudentId, educationInformation.Semester.Id);
+
+            var lessons = (await _unitOfWork.Repository<StudyLesson>().ListAsync(lessonsSpec))
+                .Select(sl => sl.Lesson)
+                .Select(_mapper.Map<MidExamDto>).ToList();
+
+            return Ok(lessons);
+        }
+
+        [HttpGet("get-final-exam")]
+        public async Task<ActionResult<IReadOnlyList<MidExamDto>>> GetFinalExamDateAsync()
+        {
+            var educationInformation = await _studentService.GetStudentInformation(HttpContext.User);
+
+            if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
+
+            var lessonsSpec = new StudentLessonsSpecification(educationInformation.StudentId, educationInformation.Semester.Id);
+
+            var lessons = (await _unitOfWork.Repository<StudyLesson>().ListAsync(lessonsSpec))
+                .Select(sl => sl.Lesson)
+                .Select(_mapper.Map<FinalExamDto>).ToList();
 
             return Ok(lessons);
         }

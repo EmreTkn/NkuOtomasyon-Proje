@@ -18,6 +18,7 @@ namespace API.Extensions
             services.AddScoped<ITokenService,TokenService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IEmailSender, SmtpEmailSender>(i =>
                     new SmtpEmailSender(
                         config["EmailSender:Host"],
