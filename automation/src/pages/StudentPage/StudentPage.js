@@ -5,6 +5,7 @@ import ChangePassword from '../../components/ChangePassword/ChangePassword'
 import OzlukBilgileri from '../../components/Student/OzlukBilgileri/OzlukBilgileri'
 import OgrenimBilgileri from '../../components/Student/OgrenimBilgileri/OgrenimBilgileri'
 import DonemDersKarnem from '../../components/Student/DonemDersKarnem/DonemDersKarnem'
+import MufredatKarnem from '../../components/Student/MufredatKarnem/MufredatKarnem'
 
 import './StudentPage.css';
 
@@ -29,6 +30,8 @@ export default class StudentPage extends Component {
                 return <OgrenimBilgileri  user={props.user}></OgrenimBilgileri>;     
             case 'donemderskarnem':
                 return <DonemDersKarnem  user={props.user}></DonemDersKarnem>;     
+            case 'mufredatkarnem':
+                return <MufredatKarnem  user={props.user}></MufredatKarnem>;   
           default:
             return 'Hoşgeldiniz';
         }
