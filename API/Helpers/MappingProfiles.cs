@@ -48,7 +48,7 @@ namespace API.Helpers
 
             CreateMap<Grade, GradeCardDto>()
                 .ForMember(dst => dst.TeacherName,
-                    opt => opt.MapFrom(x => x.Lesson.Teacher.FirstName + x.Lesson.Teacher.LastName))
+                    opt => opt.MapFrom(x => x.Lesson.Teacher.FirstName + " " + x.Lesson.Teacher.LastName))
                 .ForMember(dst => dst.Akts, opt => opt.MapFrom(src => src.Lesson.Akts))
                 .ForMember(dst => dst.GradesAverage, opt => opt.MapFrom(src => src.Average))
                 .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.Lesson.LessonCode))
@@ -72,12 +72,12 @@ namespace API.Helpers
                 .ForMember(dst => dst.Letter, opt => opt.MapFrom<LetterResolver<CurriculumGradeCardDto>>())
                 .ForMember(dst => dst.LetterGrade, opt => opt.MapFrom<LetterGradeResolver<CurriculumGradeCardDto>>())
                 .ForMember(dst => dst.NumberOfLessonTaken, opt => opt.MapFrom(src => src.NumberOfLessonTaken))
-                .ForMember(dst => dst.LessonStatus, opt => opt.MapFrom<LessonStatusResolver>())
+                .ForMember(dst => dst.LessonStatus, opt => opt.MapFrom<LessonStatusResolver<CurriculumGradeCardDto>>())
                 .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.Lesson.LessonName))
                 .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.Lesson.LessonCode))
                 .ForMember(dst => dst.LessonType, opt => opt.MapFrom(src => src.Lesson.LessonType))
                 .ForMember(dst => dst.Akts, opt => opt.MapFrom(src => src.Lesson.Akts))
-                .ForMember(dst => dst.SuccessStatus, opt => opt.MapFrom<LessonStatusResolver>())
+                .ForMember(dst => dst.SuccessStatus, opt => opt.MapFrom<LessonStatusResolver<CurriculumGradeCardDto>>())
                 .ForMember(dst => dst.StatusAbsenteeism, opt => opt.MapFrom(src => src.FailedAbsenteeism))
                 .ForMember(dst => dst.Semester, opt => opt.MapFrom(src => src.Lesson.Semester.Id));
 
@@ -88,7 +88,7 @@ namespace API.Helpers
                 .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.LessonName))
                 .ForMember(dst => dst.LessonStartHour, opt => opt.MapFrom(src => src.LessonStartHour))
                 .ForMember(dst => dst.TeacherName,
-                    opt => opt.MapFrom(src => src.Teacher.FirstName + src.Teacher.LastName));
+                    opt => opt.MapFrom(src => src.Teacher.FirstName + " " + src.Teacher.LastName));
 
             CreateMap<Lesson, MidExamDto>()
                 .ForMember(dst => dst.ClassroomName, opt => opt.MapFrom(src => src.ExamClassRoom.ClassRoomName))
@@ -96,7 +96,7 @@ namespace API.Helpers
                 .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.LessonCode))
                 .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.LessonName))
                 .ForMember(dst => dst.TeacherName,
-                    opt => opt.MapFrom(src => src.Teacher.FirstName + src.Teacher.LastName));
+                    opt => opt.MapFrom(src => src.Teacher.FirstName + " " + src.Teacher.LastName));
 
             CreateMap<Lesson, FinalExamDto>()
                 .ForMember(dst => dst.ClassroomName, opt => opt.MapFrom(src => src.ExamClassRoom.ClassRoomName))
@@ -105,6 +105,21 @@ namespace API.Helpers
                 .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.LessonName))
                 .ForMember(dst => dst.TeacherName,
                     opt => opt.MapFrom(src => src.Teacher.FirstName + src.Teacher.LastName));
+
+            CreateMap<Grade, SemesterGradeCardDto>()
+                .ForMember(dst => dst.TeacherName,
+                    opt => opt.MapFrom(src => src.Lesson.Teacher.FirstName + " " + src.Lesson.Teacher.LastName))
+                .ForMember(dst => dst.GradeAverage, opt => opt.MapFrom(src => src.Average))
+                .ForMember(dst => dst.LastExam, opt => opt.MapFrom(src => src.MakeUpExam))
+                .ForMember(dst => dst.MidExam, opt => opt.MapFrom(src => src.MidTerm))
+                .ForMember(dst => dst.StatusAbsenteeism, opt => opt.MapFrom(src => src.FailedAbsenteeism))
+                .ForMember(dst => dst.SuccessStatus, opt => opt.MapFrom<LessonStatusResolver<GradeDto>>())
+                .ForMember(dst => dst.Letter, opt => opt.MapFrom<LetterResolver<SemesterGradeCardDto>>())
+                .ForMember(dst => dst.LetterGrade, opt => opt.MapFrom<LetterGradeResolver<SemesterGradeCardDto>>())
+                .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.Lesson.LessonName))
+                .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.Lesson.LessonCode));
+
+            CreateMap<Semester, SemesterDto>();
         }
     }
 }

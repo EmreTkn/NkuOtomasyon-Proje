@@ -4,9 +4,9 @@ using Core.Entities;
 
 namespace API.Helpers
 {
-    public class LessonStatusResolver : IValueResolver<Grade,CurriculumGradeCardDto,LessonStatus>
+    public class LessonStatusResolver<T> : IValueResolver<Grade,T,LessonStatus> where T : GradeDto
     {
-        public LessonStatus Resolve(Grade source, CurriculumGradeCardDto destination, LessonStatus destMember,
+        public LessonStatus Resolve(Grade source, T destination, LessonStatus destMember,
             ResolutionContext context)
         {
             if (source.NumberOfLessonTaken != 0)
