@@ -11,6 +11,7 @@ using Core.Entities.Identity;
 using Core.Interfaces;
 using Core.Specification.LessonSpecs;
 using Core.Specification.StudentSpecs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,12 +31,6 @@ namespace API.Controllers
             _mapper = mapper;
             _userManager = userManager;
             _studentService = studentService;
-        }
-
-        [HttpPost("add")]
-        public async Task<ApiResponse> InsertNewLessonAsync(API.Dtos.RequestDto.LessonDto lesson)
-        {
-            return new ApiResponse(200);
         }
 
         [HttpGet("get-lesson-params")]
@@ -156,6 +151,31 @@ namespace API.Controllers
                 .Select(_mapper.Map<FinalExamDto>).ToList();
 
             return Ok(lessons);
+        }
+
+        [HttpGet("get-semester-lesson")]
+        public async Task<ActionResult<IReadOnlyList<LessonToAdd>>> GetLessonsBySemester()
+        {
+            var educationInformation = await _studentService.GetStudentInformation(HttpContext.User); //refaktor yapılacak.
+            if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
+
+            var semesterLessonSpec = new CurrentSemesterLessonsSpecification(educationInformation.Semester.Id);
+            var semesterLessons =
+                (await _unitOfWork.Repository<Lesson>().ListAsync(semesterLessonSpec))
+                .Select(_mapper.Map<LessonToAdd>).ToList();
+
+            if (educationInformation.Semester.Id - 2 > 0)
+            {
+                var failedLessonsSpec = new FailedLessonsSpecification(educationInformation.Semester.Id - 2);
+                var failedLessons = (await _unitOfWork.Repository<Grade>().ListAsync(failedLessonsSpec))
+                    .Select(src => src.Lesson)
+                    .Select(_mapper.Map<LessonToAdd>)
+                    .Select(_mapper.Map<LessonToAdd>).ToList(); //son mapper tekrar ders olduğunu belirtmek için Repetition true döndürüyor.
+
+                semesterLessons.AddRange(failedLessons);
+            }
+
+            return semesterLessons;
         }
     }
 }

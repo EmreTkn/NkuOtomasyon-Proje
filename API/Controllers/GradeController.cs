@@ -47,7 +47,6 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<SemesterGradeCardDto>>> GetSemesterGradeById(int semesterId)
         {
             var spec = new CurrentSemesterGradeSpecification(semesterId);
-
             return Ok((await _unitOfWork.Repository<Grade>().ListAsync(spec))
                 .Select(_mapper.Map<SemesterGradeCardDto>).ToList());
         }

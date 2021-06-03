@@ -1,4 +1,5 @@
 ﻿
+
 namespace API.Dtos.ResponseDto
 {
     public class GradeCardDto : GradeDto
@@ -10,7 +11,7 @@ namespace API.Dtos.ResponseDto
         public int Semester { get; set; }
         public string LessonYear { get; set; }
         public int? SemesterGrade { get; set; }
-       
     }
+
 
 }

@@ -1,5 +1,4 @@
-﻿using System.Net.NetworkInformation;
-using Core.Entities;
+﻿using Core.Entities;
 
 namespace Core.Specification.SemesterSpecs
 {
