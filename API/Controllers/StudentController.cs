@@ -55,5 +55,7 @@ namespace API.Controllers
 
             return Ok(_mapper.Map<PersonalInformationDto>(result));
         }
+
+
     }
 }

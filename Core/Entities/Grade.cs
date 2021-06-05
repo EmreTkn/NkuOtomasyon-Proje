@@ -19,5 +19,7 @@ namespace Core.Entities
         public int? Average { get; set; }
         public string GradeLetter { get; set; }
         public int NumberOfLessonTaken { get; set; }
+        public int SemesterId { get; set; }
+
     }
 }

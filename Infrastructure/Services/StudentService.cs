@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.Entities;
@@ -24,9 +25,14 @@ namespace Infrastructure.Services
         public async Task<StudentInformation> GetStudentInformation(ClaimsPrincipal user)  //memorycache kullan. devamlı kullanılacak.
         {
             var email = user?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-            var id = (await _userManager.Users.SingleOrDefaultAsync(x => x.Email == email)).Id;
-            var spec = new StudentEducationInformationSpecification(id);
-            return await _unitOfWork.Repository<StudentInformation>().GetWithSpec(spec);
+            if (!String.IsNullOrEmpty(email))
+            { 
+                var id = (await _userManager.Users.SingleOrDefaultAsync(x => x.Email == email)).Id;
+                var spec = new StudentEducationInformationSpecification(id); 
+                return await _unitOfWork.Repository<StudentInformation>().GetWithSpec(spec);  
+            }
+
+            return null;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace API.Dtos.ResponseDto
 {
-    public class LessonToAdd : LessonDto
+    public class LessonToAddDto : LessonDto
     {
         public bool Repetition { get; set; }
     }

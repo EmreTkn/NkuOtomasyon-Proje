@@ -120,10 +120,10 @@ namespace API.Helpers
                 .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.Lesson.LessonCode));
 
             CreateMap<Semester, SemesterDto>();
-            CreateMap<Lesson, LessonToAdd>()
+            CreateMap<Lesson, LessonToAddDto>()
                 .ForMember(dst => dst.TeacherName,
                     opt => opt.MapFrom(src => src.Teacher.FirstName + " " + src.Teacher.LastName));
-            CreateMap<LessonToAdd, LessonToAdd>()
+            CreateMap<LessonToAddDto, LessonToAddDto>()
                 .ForMember(dst => dst.Repetition, opt => opt.MapFrom(src => true));
         }
     }
