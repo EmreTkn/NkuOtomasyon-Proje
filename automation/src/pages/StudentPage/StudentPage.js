@@ -7,7 +7,8 @@ import OgrenimBilgileri from '../../components/Student/OgrenimBilgileri/OgrenimB
 import DonemDersKarnem from '../../components/Student/DonemDersKarnem/DonemDersKarnem'
 import MufredatKarnem from '../../components/Student/MufredatKarnem/MufredatKarnem'
 import HaftalikDersProgrami from '../../components/Student/HaftalikDersProgrami/HaftalikDersProgrami'
-
+import DonemSinavProgrami from '../../components/Student/DonemSinavProgrami/DonemSinavProgrami'
+import DonemDersNotlari from '../../components/Student/DonemDersNotlari/DonemDersNotlari'
 import './StudentPage.css';
 
 export default class StudentPage extends Component {
@@ -35,8 +36,12 @@ export default class StudentPage extends Component {
                 return <MufredatKarnem  user={props.user}></MufredatKarnem>;   
             case 'haftalikdersprogramim':
                 return <HaftalikDersProgrami  user={props.user}></HaftalikDersProgrami>;  
+            case 'donemsinavprogramim':
+                return <DonemSinavProgrami  user={props.user}></DonemSinavProgrami>;  
+            case 'donemdersnotlarim':
+                return <DonemDersNotlari  user={props.user}></DonemDersNotlari>;  
           default:
-            return 'Hoşgeldiniz';
+            return <OzlukBilgileri  user={props.user}></OzlukBilgileri>;
         }
       }
     render() {

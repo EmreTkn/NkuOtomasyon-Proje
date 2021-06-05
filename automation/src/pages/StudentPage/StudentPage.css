@@ -2,3 +2,7 @@
     min-height: 100vh !important;
     min-height: -webkit-fill-available;
 }
+
+.border-line{
+    border-bottom: 1px solid white !important;
+}
