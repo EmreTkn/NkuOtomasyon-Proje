@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import logo from "../../../images/logo.png"
+import { If, Then, ElseIf, Else } from "react-if-elseif-else-render";
+
 
 export default class OgrenimBilgileri extends Component {
     constructor(props){
         super(props);
         this.state = {
             token : this.props.user,
-            userData: {},
+            userProgram: {},
         }
     }
     async componentDidMount() {
@@ -20,7 +22,7 @@ export default class OgrenimBilgileri extends Component {
         const response = await fetch(process.env.REACT_APP_BASE_URL+'lesson/get-lessons-dates',requestOptions);
         if(response.ok){
             const res = await response.json();
-            this.setState({userData: res});
+            this.setState({userProgram: res});
         }
         else{
             const res = await response.json();
@@ -35,8 +37,8 @@ export default class OgrenimBilgileri extends Component {
             </div>
             <div className="table-responsive">
               <table className="table table-striped table-sm text-white">
-                <tr>
-                    <th></th>
+                <tr className="text-white border-line">
+                <th></th>
                     <th>1.Ders</th>
                     <th>2.Ders</th>
                     <th>3.Ders</th>
@@ -46,61 +48,301 @@ export default class OgrenimBilgileri extends Component {
                     <th>7.Ders</th>
                     <th>8.Ders</th>
                 </tr>
-                <tr>
-                    <th>Pazartesi</th>
-                    <td>DİL ANLATIM</td>
-                    <td>DİL ANLATIM</td>
-                    <td>FELSEFE</td>
-                    <td>FELSEFE</td>
-                    <td>TÜRK EDEBİYATI</td>
-                    <td>TÜRK EDEBİYATI</td>
-                    <td>BEDEN</td>
-                    <td>COĞRAFYA</td>
+                <tr className="border-line">
+                    <th>Pazartesi</th> 
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 1}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 2}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 3}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 4}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 5}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 6}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 7}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 0 && program.lessonStartHour == 8}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
                 </tr>
-                <tr>
+                <tr className="border-line">
                     <th>Salı</th> 
-                    <td>BİLGİSAYAR</td>
-                    <td>BİLGİSAYAR</td>
-                    <td>BİLGİSAYAR</td>
-                    <td>BİLGİSAYAR</td>
-                    <td>YABANCI DİL</td>
-                    <td>YABANCI DİL</td>
-                    <td>MATEMATİK</td>
-                    <td>DİN KÜLTÜRÜ</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 1}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 2}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 3}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 4}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 5}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 6}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 7}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 1 && program.lessonStartHour == 8}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
                 </tr>
-                <tr>
-                    <th>Çarşamba</th>
-                    <td>TÜRK EDEBİYATI</td>
-                    <td>TÜRK EDEBİYATI</td>
-                    <td>VERİ TABANI</td>
-                    <td>VERİ TABANI</td>
-                    <td>TARİH</td>
-                    <td>AĞ TEMELLERİ</td>
-                    <td>AĞ TEMELLERİ</td>
-                    <td>AĞ TEMELLERİ</td>
+                <tr className="border-line">
+                    <th>Çarşamba</th> 
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 1}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 2}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 3}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 4}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 5}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 6}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 7}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 2 && program.lessonStartHour == 8}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
                 </tr>
-                <tr>
-                    <th>Perşembe</th>
-                    <td>COĞRAFYA</td>
-                    <td>COĞRAFYA</td>
-                    <td>DİN KÜLTÜRÜ</td>            			
-                    <td>GRAFİK TASARIM</td>
-                    <td>GRAFİK TASARIM</td>
-                    <td>GRAFİK TASARIM</td>
-                    <td>GRAFİK TASARIM</td>
-                    <td>GRAFİK TASARIM</td>
+                <tr className="border-line">
+                    <th>Perşembe</th> 
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 1}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 2}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 3}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 4}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 5}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 6}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 7}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 3 && program.lessonStartHour == 8}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
                 </tr>
-                <tr>
-                    <th>Cuma</th>
-                    <td>WEB TASARIMI</td>
-                    <td>WEB TASARIMI</td>
-                    <td>WEB TASARIMI</td>
-                    <td>WEB TASARIMI</td>
-                    <td>WEB TASARIMI</td>
-                    <td>WEB TASARIMI</td>
-                    <td>VERİ TABANI</td>
-                    <td>VERİ TABANI</td>
-                </tr>   
+                <tr className="border-line">
+                    <th>Cuma</th> 
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 1}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 2}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 3}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 4}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 5}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 6}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 7}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                    <td> {Object.values(this.state.userProgram).map((program) =>
+                    <If condition={program.lessonDay == 4 && program.lessonStartHour == 8}>
+                    <Then>
+                     {program.lessonName}
+                    </Then>
+                    </If>
+                    )}</td>
+                </tr>
               </table>
             </div>
           </div>
