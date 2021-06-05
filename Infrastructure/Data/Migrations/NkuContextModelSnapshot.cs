@@ -85,6 +85,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("NumberOfLessonTaken")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SemesterId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("StudentId")
                         .HasColumnType("TEXT");
 
@@ -117,8 +120,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("LessonClassRoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LessonDay")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("LessonDay")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LessonName")
                         .HasColumnType("TEXT");

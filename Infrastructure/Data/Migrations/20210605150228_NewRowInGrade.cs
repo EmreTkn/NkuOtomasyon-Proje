@@ -2,18 +2,12 @@
 
 namespace Infrastructure.Data.Migrations
 {
-    public partial class AddLessonTypeFromLessons : Migration
+    public partial class NewRowInGrade : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "LessonType",
-                table: "Lessons",
-                nullable: false,
-                defaultValue: false);
-
             migrationBuilder.AddColumn<int>(
-                name: "NumberOfLessonTaken",
+                name: "SemesterId",
                 table: "Grades",
                 nullable: false,
                 defaultValue: 0);
@@ -22,11 +16,7 @@ namespace Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "LessonType",
-                table: "Lessons");
-
-            migrationBuilder.DropColumn(
-                name: "NumberOfLessonTaken",
+                name: "SemesterId",
                 table: "Grades");
         }
     }

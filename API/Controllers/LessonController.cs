@@ -11,7 +11,6 @@ using Core.Entities.Identity;
 using Core.Interfaces;
 using Core.Specification.LessonSpecs;
 using Core.Specification.StudentSpecs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -154,28 +153,56 @@ namespace API.Controllers
         }
 
         [HttpGet("get-semester-lesson")]
-        public async Task<ActionResult<IReadOnlyList<LessonToAdd>>> GetLessonsBySemester()
+        public async Task<ActionResult<IReadOnlyList<LessonToAddDto>>> GetLessonsBySemester()
         {
             var educationInformation = await _studentService.GetStudentInformation(HttpContext.User); //refaktor yapılacak.
             if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
 
-            var semesterLessonSpec = new CurrentSemesterLessonsSpecification(educationInformation.Semester.Id);
+            var studentLessonSpec = new StudentLessonsSpecification(educationInformation.StudentId, educationInformation.Semester.Id);
+            var studentLessonCodes = (await _unitOfWork.Repository<StudyLesson>()
+                    .ListAsync(studentLessonSpec))
+                .Select(src => src.Lesson.LessonCode).ToList();
+
+            var semesterLessonSpec = new CurrentSemesterLessonsSpecification(educationInformation.Semester.Id, studentLessonCodes);
             var semesterLessons =
                 (await _unitOfWork.Repository<Lesson>().ListAsync(semesterLessonSpec))
-                .Select(_mapper.Map<LessonToAdd>).ToList();
+                .Select(_mapper.Map<LessonToAddDto>).ToList();
 
-            if (educationInformation.Semester.Id - 2 > 0)
-            {
-                var failedLessonsSpec = new FailedLessonsSpecification(educationInformation.Semester.Id - 2);
-                var failedLessons = (await _unitOfWork.Repository<Grade>().ListAsync(failedLessonsSpec))
-                    .Select(src => src.Lesson)
-                    .Select(_mapper.Map<LessonToAdd>)
-                    .Select(_mapper.Map<LessonToAdd>).ToList(); //son mapper tekrar ders olduğunu belirtmek için Repetition true döndürüyor.
+            
 
-                semesterLessons.AddRange(failedLessons);
-            }
+      
 
             return semesterLessons;
         }
+
+        [HttpGet("get-selected-lesson")]
+        public async Task<ActionResult<IReadOnlyList<LessonToAddDto>>> GetSelectedLessonsBySemester()
+        {
+            var educationInformation = await _studentService.GetStudentInformation(HttpContext.User); //refaktor yapılacak.
+            if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
+
+            var studentLessonSpec = new StudentLessonsSpecification(educationInformation.StudentId, educationInformation.Semester.Id);
+
+          var selectedLesson =(await _unitOfWork.Repository<StudyLesson>()
+                    .ListAsync(studentLessonSpec))
+                .Select(src => src.Lesson)
+                .Select(_mapper.Map<LessonToAddDto>).ToList();
+          var lessonCodes = selectedLesson.Select(src => src.LessonCode).ToList();
+
+            if (educationInformation.Semester.Id - 2 > 0)  //Kalan dersler eklenecek kısımda olmalı. Daha önce eklenip eklenmediği diğer tarafta sorgulansın.
+            {
+                var failedLessonsSpec = new FailedLessonsSpecification(educationInformation.Semester.Id - 2, lessonCodes);
+                var failedLessons = (await _unitOfWork.Repository<Grade>().ListAsync(failedLessonsSpec))
+                    .Select(src => src.Lesson)
+                    .Select(_mapper.Map<LessonToAddDto>)
+                    .Select(_mapper.Map<LessonToAddDto>).ToList(); //son mapper tekrar ders olduğunu belirtmek için Repetition true döndürüyor.
+
+                selectedLesson.AddRange(failedLessons);
+            }
+
+            return selectedLesson;
+        }
+
+
     }
 }

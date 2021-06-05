@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(NkuContext))]
-    [Migration("20210530133644_ChangeLessondayType")]
-    partial class ChangeLessondayType
+    [Migration("20210605150228_NewRowInGrade")]
+    partial class NewRowInGrade
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -87,6 +87,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("NumberOfLessonTaken")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SemesterId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("StudentId")
                         .HasColumnType("TEXT");
 
@@ -119,8 +122,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("LessonClassRoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LessonDay")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("LessonDay")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LessonName")
                         .HasColumnType("TEXT");
