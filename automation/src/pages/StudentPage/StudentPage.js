@@ -9,6 +9,7 @@ import MufredatKarnem from '../../components/Student/MufredatKarnem/MufredatKarn
 import HaftalikDersProgrami from '../../components/Student/HaftalikDersProgrami/HaftalikDersProgrami'
 import DonemSinavProgrami from '../../components/Student/DonemSinavProgrami/DonemSinavProgrami'
 import DonemDersNotlari from '../../components/Student/DonemDersNotlari/DonemDersNotlari'
+
 import './StudentPage.css';
 
 export default class StudentPage extends Component {
