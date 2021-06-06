@@ -275,7 +275,10 @@ namespace API.Controllers
                 {
                     _unitOfWork.Repository<StudyLesson>().Delete(studyLessons);
                 }
-            
+                else
+                {
+                    return new ApiResponse(200, "Böyle bir kayıt bulunamadı.");
+                }
             }
             await _unitOfWork.Complete();
             return new ApiResponse(200, "İşlem başarı ile gerçekleşti.");

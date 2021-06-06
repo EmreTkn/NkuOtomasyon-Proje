@@ -1,19 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Core.Entities;
 
 namespace API.Dtos
 {
     public class UpdateStudentDto
     {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Address { get; set; }
-        public int TcNumber { get; set; }
-        public string SchoolNumber { get; set; }
-        public int StudyProgramId { get; set; }
+        public string StudentNumber { get; set; }
+        public EducationType EducationType { get; set; }
+        public int StudyTimeId { get; set; }
+        public string AdvisorTeacherId { get; set; }
+        public double GradeAverage { get; set; }
         public int FacultyId { get; set; }
-        public IFormFile FormFile { get; set; }
+        public int StudyProgramId { get; set; }
+        public int SemesterId { get; set; }
+        public RecordType RecordType { get; set; }
+        public string ComeFromUniversity { get; set; }
+        public string ComeFromFaculty { get; set; }
+        public string ComeFromBranch { get; set; }
+        public DateTime GraduationYear { get; set; }
     }
 }

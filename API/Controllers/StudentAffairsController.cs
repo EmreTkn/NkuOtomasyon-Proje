@@ -1,9 +1,12 @@
 ﻿using System.Threading.Tasks;
+using API.Dtos;
 using API.Errors;
+using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
 using Core.Specification;
+using Core.Specification.SemesterSpecs;
 using Core.Specification.UpdateSpecs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,36 +20,91 @@ namespace API.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICloudinaryService _cloudinary;
+        private readonly IStudentService _studentService;
+        private readonly IMapper _mapper;
        
 
-        public StudentAffairsController(UserManager<User> userManager,IUnitOfWork unitOfWork,ICloudinaryService cloudinary)
+        public StudentAffairsController(UserManager<User> userManager,IUnitOfWork unitOfWork,ICloudinaryService cloudinary, IStudentService studentService, IMapper mapper)
         {
             _userManager = userManager;
             _unitOfWork = unitOfWork;
             _cloudinary = cloudinary;
+            _studentService = studentService;
+            _mapper = mapper;
         }
 
 
 
         [HttpPost("upload-photo")]
-        public async Task<ActionResult> UploadPhotoForStudent([FromForm]string studentNumber,[FromForm]IFormFile fileToCome)
+        public async Task<ActionResult> UploadPhotoForStudentAsync([FromForm]string studentNumber,[FromForm]IFormFile fileToCome)
         {
-            var spec= new StudentWithIncludesSpecification(studentNumber);
-            var student = await _unitOfWork.Repository<Student>().GetWithSpec(spec);
+            var student = await _studentService.GetStudentInformationByStudentNumber(studentNumber);
 
-            var photoSpec = new StudentPhotoSpecification(student.Id);
+            var photoSpec = new StudentPhotoSpecification(student.StudentId);
             var photo = await _unitOfWork.Repository<Photo>().GetWithSpec(photoSpec);
 
             if (photo == null)
             {
-                return await PhotoRepository(fileToCome, student);
+                return await PhotoRepository(fileToCome, student.Student);
             }
             else
             {
                 _unitOfWork.Repository<Photo>().Delete(photo);
                 await _unitOfWork.Complete();
-                return await PhotoRepository(fileToCome, student);
+                return await PhotoRepository(fileToCome, student.Student);
             }
+        }
+
+        [HttpPost("update-education")]
+        public async Task<ActionResult> UpdateStudentEducationInformationAsync(UpdateStudentDto information)
+        {
+            var studentInformation = await _studentService.GetStudentInformationByStudentNumber(information.StudentNumber);
+            if (studentInformation == null)
+            {
+                var student = await _studentService.GetStudentByNumber(information.StudentNumber);
+                _unitOfWork.Repository<StudentInformation>().Add(new StudentInformation()
+              {
+                  Student = student,
+                  StudentId = student.Id,
+                  Semester = await _unitOfWork.Repository<Semester>().GetByIntIdAsync(information.SemesterId),
+                  AdvisorTeacher = await _unitOfWork.Repository<Teacher>().GetByIdAsync(information.AdvisorTeacherId),
+                  RecordType = information.RecordType,
+                  EducationType = information.EducationType,
+                  ComeFromBranch = information.ComeFromBranch,
+                  ComeFromFaculty = information.ComeFromFaculty,
+                  ComeFromUniversity = information.ComeFromUniversity,
+                  Faculty = await _unitOfWork.Repository<Faculty>().GetByIntIdAsync(information.FacultyId),
+                  GradeAverage = information.GradeAverage,
+                  GraduationYear = information.GraduationYear,
+                  StudyProgram = await _unitOfWork.Repository<StudyProgram>().GetByIntIdAsync(information.StudyProgramId),
+                  StudyTime = await _unitOfWork.Repository<StudyTime>().GetByIntIdAsync(information.StudyTimeId)
+              });
+            }
+            else
+            {
+                studentInformation.Semester =
+                    await _unitOfWork.Repository<Semester>().GetByIntIdAsync(information.SemesterId);
+                studentInformation.AdvisorTeacher =
+                    await _unitOfWork.Repository<Teacher>().GetByIdAsync(information.AdvisorTeacherId);
+                studentInformation.RecordType = information.RecordType;
+                studentInformation.EducationType = information.EducationType;
+                studentInformation.ComeFromBranch = information.ComeFromBranch;
+                studentInformation.ComeFromFaculty = information.ComeFromFaculty;
+                studentInformation.ComeFromUniversity = information.ComeFromUniversity;
+                studentInformation.Faculty =
+                    await _unitOfWork.Repository<Faculty>().GetByIntIdAsync(information.FacultyId);
+                studentInformation.GradeAverage = information.GradeAverage;
+                studentInformation.GraduationYear = information.GraduationYear;
+                studentInformation.StudyProgram = await _unitOfWork.Repository<StudyProgram>()
+                    .GetByIntIdAsync(information.StudyProgramId);
+                studentInformation.StudyTime =
+                    await _unitOfWork.Repository<StudyTime>().GetByIntIdAsync(information.StudyTimeId);
+
+               _unitOfWork.Repository<StudentInformation>().Update(studentInformation);
+            }
+
+            await _unitOfWork.Complete();
+            return Ok();
         }
 
         private async Task<ActionResult> PhotoRepository(IFormFile fileToCome, Student student)
@@ -60,5 +118,7 @@ namespace API.Controllers
             }
             return BadRequest(new ApiResponse(500, "Yükleme işleme sırasında bir hata oluştu."));
         }
+
+  
     }
 }

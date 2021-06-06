@@ -8,5 +8,10 @@ namespace Core.Specification.SemesterSpecs
         {
             AddInclude(x => x.Lessons);
         }
+
+        public SemesterWithLessonsByIdSpecification(int semesterId) : base(src => src.Id == semesterId)
+        {
+            
+        }
     }
 }

@@ -140,7 +140,8 @@ namespace API.Helpers
                 .ForMember(dst => dst.Id, opt => opt.Ignore())
                 .AfterMap((src, dst) => dst.Student.Id = src.Student.Id);
 
-
+            CreateMap<UpdateStudentDto, StudentInformation>()
+                .ForAllMembers(opt => opt.MapFrom<UpdateValueResolver>());
 
 
 

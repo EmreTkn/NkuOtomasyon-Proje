@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
+using Core.Specification;
 using Core.Specification.StudentSpecs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,20 @@ namespace Infrastructure.Services
             }
 
             return null;
+        }
+
+        public async Task<StudentInformation> GetStudentInformationByStudentNumber(string studentNumber)
+        {
+            var spec = new StudentWithIncludesSpecification(studentNumber);
+            var student = await _unitOfWork.Repository<Student>().GetWithSpec(spec);
+            var informSpec = new StudentEducationInformationSpecification(student.Id);
+            return await _unitOfWork.Repository<StudentInformation>().GetWithSpec(informSpec);
+        }
+
+        public async Task<Student> GetStudentByNumber(string studentNumber)
+        {
+            var spec = new StudentWithIncludesSpecification(studentNumber);
+            return await _unitOfWork.Repository<Student>().GetWithSpec(spec);
         }
     }
 }

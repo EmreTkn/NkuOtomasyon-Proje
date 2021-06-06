@@ -19,8 +19,10 @@ namespace Core.Entities
         LYS,
         YatayGecis
     }
+
    public class StudentInformation
     {
+
         public int Id { get; set; }
         public Student Student { get; set; }
         public string StudentId { get; set; }

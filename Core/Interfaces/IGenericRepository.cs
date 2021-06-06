@@ -7,6 +7,7 @@ namespace Core.Interfaces
     public interface IGenericRepository<T>
     {
         Task<T> GetByIdAsync(string id);
+        Task<T> GetByIntIdAsync(int id);
         Task<IReadOnlyList<T>> ListAllAsync();
         Task<T> GetWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
