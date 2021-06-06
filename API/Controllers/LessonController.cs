@@ -314,6 +314,7 @@ namespace API.Controllers
                         var mappedData = failedLessonsGrade.Select(_mapper.Map<Grade>).ToList();
                         _unitOfWork.Repository<Grade>().AddRange(mappedData);
                         await _unitOfWork.Complete();
+
                     }
                 }
             }
