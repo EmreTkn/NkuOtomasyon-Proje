@@ -10,5 +10,11 @@ namespace Core.Specification.StudentSpecs
             AddInclude(x => x.Lesson);
             AddInclude(x => x.Lesson.ExamClassRoom);
         }
+
+        public StudentLessonsSpecification(string studentId, string lessonCode) : 
+            base(src => src.LessonCode ==lessonCode && src.StudentId == studentId)
+        {
+            
+        }
     }
 }

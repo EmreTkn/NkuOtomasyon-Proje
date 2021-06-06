@@ -14,6 +14,7 @@ namespace Core.Specification.StudentSpecs
             AddInclude(s => s.StudyTime);
             AddInclude(s => s.AdvisorTeacher);
             AddInclude(s => s.Faculty);
+            AddInclude(s => s.Student);
         }
     }
 }

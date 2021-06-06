@@ -46,6 +46,11 @@ namespace Infrastructure.Data
             _context.Set<T>().Add(entity);
         }
 
+        public void AddRange(List<T> entity)
+        {
+            _context.Set<T>().AddRange(entity);
+        }
+
         public void Update(T entity)
         {
             _context.Set<T>().Attach(entity);
@@ -55,6 +60,11 @@ namespace Infrastructure.Data
         public void Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
+        }
+
+        public void DeleteRange(List<T> entity)
+        {
+            _context.Set<T>().RemoveRange(entity);
         }
 
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)

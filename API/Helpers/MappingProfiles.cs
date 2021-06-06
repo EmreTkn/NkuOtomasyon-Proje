@@ -1,4 +1,5 @@
-﻿using API.Dtos;
+﻿using System;
+using API.Dtos;
 using API.Dtos.ResponseDto;
 using AutoMapper;
 using Core.Entities;
@@ -125,6 +126,29 @@ namespace API.Helpers
                     opt => opt.MapFrom(src => src.Teacher.FirstName + " " + src.Teacher.LastName));
             CreateMap<LessonToAddDto, LessonToAddDto>()
                 .ForMember(dst => dst.Repetition, opt => opt.MapFrom(src => true));
+
+            CreateMap<Grade, Grade>() //for repitition lessons.
+                .ForMember(dst => dst.SemesterId, opt => opt.MapFrom(src => src.SemesterId + 2))
+                .ForMember(dst => dst.Average, opt => opt.Ignore())
+                .ForMember(dst => dst.FailedAbsenteeism, opt => opt.MapFrom(src => false))
+                .ForMember(dst => dst.FailedLowGrade, opt => opt.MapFrom(src => false))
+                .ForMember(dst => dst.FinalExam, opt => opt.Ignore())
+                .ForMember(dst => dst.GradeLetter, opt => opt.Ignore())
+                .ForMember(dst => dst.MakeUpExam, opt => opt.Ignore())
+                .ForMember(dst => dst.MidTerm, opt => opt.Ignore())
+                .ForMember(dst => dst.NumberOfLessonTaken, opt => opt.MapFrom(src => src.NumberOfLessonTaken + 1))
+                .ForMember(dst => dst.Id, opt => opt.Ignore())
+                .AfterMap((src, dst) => dst.Student.Id = src.Student.Id);
+
+
+
+
+
+
+
+
+
+
         }
     }
 }

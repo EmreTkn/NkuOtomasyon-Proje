@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
@@ -9,6 +10,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
+using Core.Specification.GradeSpecs;
 using Core.Specification.LessonSpecs;
 using Core.Specification.StudentSpecs;
 using Microsoft.AspNetCore.Identity;
@@ -158,8 +160,8 @@ namespace API.Controllers
             var educationInformation = await _studentService.GetStudentInformation(HttpContext.User); //refaktor yapılacak.
             if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
 
-            var studentLessonSpec = new StudentLessonsSpecification(educationInformation.StudentId, educationInformation.Semester.Id);
-            var studentLessonCodes = (await _unitOfWork.Repository<StudyLesson>()
+            var studentLessonSpec = new CurrentSemesterGradeSpecification(educationInformation.Semester.Id, educationInformation.StudentId);
+            var studentLessonCodes = (await _unitOfWork.Repository<Grade>()
                     .ListAsync(studentLessonSpec))
                 .Select(src => src.Lesson.LessonCode).ToList();
 
@@ -167,10 +169,6 @@ namespace API.Controllers
             var semesterLessons =
                 (await _unitOfWork.Repository<Lesson>().ListAsync(semesterLessonSpec))
                 .Select(_mapper.Map<LessonToAddDto>).ToList();
-
-            
-
-      
 
             return semesterLessons;
         }
@@ -181,28 +179,144 @@ namespace API.Controllers
             var educationInformation = await _studentService.GetStudentInformation(HttpContext.User); //refaktor yapılacak.
             if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
 
-            var studentLessonSpec = new StudentLessonsSpecification(educationInformation.StudentId, educationInformation.Semester.Id);
+            await FailedLessonControl(educationInformation); //Add to lessons where last semester failed from grades.
 
-          var selectedLesson =(await _unitOfWork.Repository<StudyLesson>()
+
+            var studentLessonSpec =
+                new CurrentSemesterGradeSpecification(educationInformation.Semester.Id, educationInformation.StudentId);
+
+            var selectedLesson =(await _unitOfWork.Repository<Grade>()
                     .ListAsync(studentLessonSpec))
                 .Select(src => src.Lesson)
                 .Select(_mapper.Map<LessonToAddDto>).ToList();
-          var lessonCodes = selectedLesson.Select(src => src.LessonCode).ToList();
-
-            if (educationInformation.Semester.Id - 2 > 0)  //Kalan dersler eklenecek kısımda olmalı. Daha önce eklenip eklenmediği diğer tarafta sorgulansın.
-            {
-                var failedLessonsSpec = new FailedLessonsSpecification(educationInformation.Semester.Id - 2, lessonCodes);
-                var failedLessons = (await _unitOfWork.Repository<Grade>().ListAsync(failedLessonsSpec))
-                    .Select(src => src.Lesson)
-                    .Select(_mapper.Map<LessonToAddDto>)
-                    .Select(_mapper.Map<LessonToAddDto>).ToList(); //son mapper tekrar ders olduğunu belirtmek için Repetition true döndürüyor.
-
-                selectedLesson.AddRange(failedLessons);
-            }
-
             return selectedLesson;
         }
 
+        [HttpPost("add")]
+        public async Task<ActionResult> AddLessonById(string lessonCode)
+        {
+            var educationInformation = await _studentService.GetStudentInformation(HttpContext.User); //refaktor yapılacak.
+            if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
 
+            try
+            {
+                var result = await InsertOrDeleteEntity(lessonCode, educationInformation,true);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ApiResponse(500,e.Message));
+            }
+           
+        }
+
+        [HttpPost("delete")]
+        public async Task<ActionResult> DeleteLessonById(string lessonCode)
+        {
+            var educationInformation = await _studentService.GetStudentInformation(HttpContext.User); //refaktor yapılacak.
+            if (educationInformation == null) return BadRequest(new ApiResponse(400, "Lütfen giriş yaparak tekrar deneyiniz."));
+            try
+            { 
+                var result = await InsertOrDeleteEntity(lessonCode, educationInformation, false);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ApiResponse(500, e.Message));
+            }
+        }
+
+        private async Task<ApiResponse> InsertOrDeleteEntity(string lessonCode, StudentInformation educationInformation, bool status)
+        {
+            var lesson = await _unitOfWork.Repository<Lesson>().GetByIdAsync(lessonCode);
+
+            var spec = new StudentLessonsSpecification(educationInformation.StudentId,
+                lessonCode);
+
+            var gradeSpec = new CurrentSemesterGradeSpecification(educationInformation.Semester.Id,
+                educationInformation.StudentId, lessonCode);
+
+            var studyLessons = await _unitOfWork.Repository<StudyLesson>().GetWithSpec(spec);
+
+            var grade = await _unitOfWork.Repository<Grade>().GetWithSpec(gradeSpec);
+
+            if (status)
+            {
+                if (studyLessons == null)
+                {
+                    _unitOfWork.Repository<StudyLesson>().Add(new StudyLesson
+                    {
+                        Lesson = lesson,
+                        LessonCode = lessonCode,
+                        Student = educationInformation.Student,
+                        StudentId = educationInformation.StudentId
+                    });
+                }
+                else
+                {
+                    return new ApiResponse(200, "Eklemek istediğiniz ders zaten mevcut.");
+                }
+
+                if (grade == null)
+                {
+                    _unitOfWork.Repository<Grade>().Add(new Grade
+                    {
+                        Lesson = lesson,
+                        SemesterId = educationInformation.Semester.Id,
+                        Student = educationInformation.Student
+                    });
+                }
+                else
+                {
+                    return new ApiResponse(200, "Eklemek istediğiniz dersin notu zaten mevcut.");
+                }
+            }
+
+            if (!status)
+            {
+                if (grade != null)
+                {
+                    _unitOfWork.Repository<Grade>().Delete(grade);
+                }
+                else
+                {
+                    return new ApiResponse(200, "Böyle bir kayıt bulunamadı.");
+                }
+
+                if (studyLessons != null)
+                {
+                    _unitOfWork.Repository<StudyLesson>().Delete(studyLessons);
+                }
+                else
+                {
+                    return new ApiResponse(200, "Böyle bir kayıt bulunamadı.");
+                }
+            }
+            await _unitOfWork.Complete();
+            return new ApiResponse(200, "İşlem başarı ile gerçekleşti.");
+        }
+
+        private async Task FailedLessonControl(StudentInformation educationInformation)
+        {
+            if (educationInformation.Semester.Id - 2 > 0)
+            {
+                var failedLessonsSpec = new FailedLessonsSpecification(educationInformation.Semester.Id - 2);
+                var failedLessonsGrade = (await _unitOfWork.Repository<Grade>()
+                    .ListAsync(failedLessonsSpec)).ToList();
+                if (failedLessonsGrade.Count != 0)
+                {
+                    var spec = new FailedGradesSpecification(failedLessonsGrade.Select(src => src.Lesson.LessonCode).ToList(), educationInformation.Semester.Id);
+                    var repetitionLesson = (await _unitOfWork.Repository<Grade>().ListAsync(spec))
+                        .Select(src => src.Lesson)
+                        .ToList();
+                    if (repetitionLesson.Count == 0)
+                    {
+                        var mappedData = failedLessonsGrade.Select(_mapper.Map<Grade>).ToList();
+                        _unitOfWork.Repository<Grade>().AddRange(mappedData);
+                        await _unitOfWork.Complete();
+                    }
+                }
+            }
+        }
     }
 }
