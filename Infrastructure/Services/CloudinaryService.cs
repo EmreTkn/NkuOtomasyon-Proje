@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Core.Entities;
@@ -14,13 +13,11 @@ namespace Infrastructure.Services
    public class CloudinaryService : ICloudinaryService
     {
         private readonly IOptions<CloudinarySettings> _cloudinaryConfig;
-        private readonly IUnitOfWork _unitOfWork;
         private  Cloudinary _cloudinary;
 
-        public CloudinaryService(IOptions<CloudinarySettings> cloudinaryConfig,IUnitOfWork unitOfWork)
+        public CloudinaryService(IOptions<CloudinarySettings> cloudinaryConfig)
         {
             _cloudinaryConfig = cloudinaryConfig;
-            _unitOfWork = unitOfWork;
             Account account=new Account(_cloudinaryConfig.Value.CloudName,_cloudinaryConfig.Value.ApiKey,_cloudinaryConfig.Value.ApiSecret);
             _cloudinary=new Cloudinary(account);
         }
