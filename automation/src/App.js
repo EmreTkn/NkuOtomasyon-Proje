@@ -89,6 +89,10 @@ export default class App extends Component {
       {
         path: '/student/donemdersnotlarim',
         name: 'Dönem Ders Notlarım'
+      },
+      {
+        path: '/student/derseklekaldir',
+        name: 'Ders Ekle/Kaldır'
       }
     ]
     
@@ -113,6 +117,7 @@ export default class App extends Component {
           <Route exact path="/student/haftalikdersprogramim" render={props => (<StudentPage {... props} user={this.state.user} sidebar={studentSidebar} contentPage={'haftalikdersprogramim'} loggedIn={this.state.loggedIn}/>)} />
           <Route exact path="/student/donemsinavprogramim" render={props => (<StudentPage {... props} user={this.state.user} sidebar={studentSidebar} contentPage={'donemsinavprogramim'} loggedIn={this.state.loggedIn}/>)} />
           <Route exact path="/student/donemdersnotlarim" render={props => (<StudentPage {... props} user={this.state.user} sidebar={studentSidebar} contentPage={'donemdersnotlarim'} loggedIn={this.state.loggedIn}/>)} />
+          <Route exact path="/student/derseklekaldir" render={props => (<StudentPage {... props} user={this.state.user} sidebar={studentSidebar} contentPage={'derseklekaldir'} loggedIn={this.state.loggedIn}/>)} />
 
 
           <script src="https://unpkg.com/react/umd/react.production.min.js"></script>

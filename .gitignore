@@ -338,6 +338,3 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-/automation/src/components/Student/DonemDersNotlari/DonemDersNotlari.js
-/automation/src/components/Student/DonemSinavProgrami/DonemSinavProgrami.js
-/automation/src/components/Student/HaftalikDersProgrami/HaftalikDersProgrami.js
