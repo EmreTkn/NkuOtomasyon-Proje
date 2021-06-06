@@ -26,6 +26,8 @@ namespace API.Controllers
             _cloudinary = cloudinary;
         }
 
+
+
         [HttpPost("upload-photo")]
         public async Task<ActionResult> UploadPhotoForStudent([FromForm]string studentNumber,[FromForm]IFormFile fileToCome)
         {

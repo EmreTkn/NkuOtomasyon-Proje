@@ -252,11 +252,6 @@ namespace API.Controllers
                         StudentId = educationInformation.StudentId
                     });
                 }
-                else
-                {
-                    return new ApiResponse(200, "Eklemek istediğiniz ders zaten mevcut.");
-                }
-
                 if (grade == null)
                 {
                     _unitOfWork.Repository<Grade>().Add(new Grade
@@ -266,10 +261,7 @@ namespace API.Controllers
                         Student = educationInformation.Student
                     });
                 }
-                else
-                {
-                    return new ApiResponse(200, "Eklemek istediğiniz dersin notu zaten mevcut.");
-                }
+
             }
 
             if (!status)
@@ -278,19 +270,12 @@ namespace API.Controllers
                 {
                     _unitOfWork.Repository<Grade>().Delete(grade);
                 }
-                else
-                {
-                    return new ApiResponse(200, "Böyle bir kayıt bulunamadı.");
-                }
 
                 if (studyLessons != null)
                 {
                     _unitOfWork.Repository<StudyLesson>().Delete(studyLessons);
                 }
-                else
-                {
-                    return new ApiResponse(200, "Böyle bir kayıt bulunamadı.");
-                }
+            
             }
             await _unitOfWork.Complete();
             return new ApiResponse(200, "İşlem başarı ile gerçekleşti.");

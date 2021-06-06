@@ -7,7 +7,7 @@ namespace Core.Specification.GradeSpecs
     {
         public FailedGradesSpecification(List<string> lessonCodes, int semesterId) : 
             base(src => 
-                lessonCodes.Contains(src.Lesson.LessonCode) 
+                !lessonCodes.Contains(src.Lesson.LessonCode) 
                 && src.SemesterId == semesterId)
         {
             AddInclude(src => src.Lesson);
