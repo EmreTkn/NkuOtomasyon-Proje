@@ -187,7 +187,6 @@ namespace API.Controllers
 
             var selectedLesson =(await _unitOfWork.Repository<Grade>()
                     .ListAsync(studentLessonSpec))
-                .Select(src => src.Lesson)
                 .Select(_mapper.Map<LessonToAddDto>).ToList();
             return selectedLesson;
         }
@@ -275,10 +274,6 @@ namespace API.Controllers
                 {
                     _unitOfWork.Repository<StudyLesson>().Delete(studyLessons);
                 }
-                else
-                {
-                    return new ApiResponse(200, "Böyle bir kayıt bulunamadı.");
-                }
             }
             await _unitOfWork.Complete();
             return new ApiResponse(200, "İşlem başarı ile gerçekleşti.");
@@ -295,15 +290,14 @@ namespace API.Controllers
                 {
                     var spec = new FailedGradesSpecification(failedLessonsGrade.Select(src => src.Lesson.LessonCode).ToList(), educationInformation.Semester.Id);
                     var repetitionLesson = (await _unitOfWork.Repository<Grade>().ListAsync(spec))
-                        .Select(src => src.Lesson)
+                        .Select(src => src.Lesson.LessonCode)
                         .ToList();
-                    if (repetitionLesson.Count == 0)
-                    {
-                        var mappedData = failedLessonsGrade.Select(_mapper.Map<Grade>).ToList();
-                        _unitOfWork.Repository<Grade>().AddRange(mappedData);
-                        await _unitOfWork.Complete();
-
-                    }
+                   
+                    failedLessonsGrade = failedLessonsGrade
+                        .Where(src => !repetitionLesson.Contains(src.Lesson.LessonCode)).Select(_mapper.Map<Grade>)
+                        .ToList();
+                    _unitOfWork.Repository<Grade>().AddRange(failedLessonsGrade);
+                    await _unitOfWork.Complete();
                 }
             }
         }

@@ -124,6 +124,17 @@ namespace API.Helpers
             CreateMap<Lesson, LessonToAddDto>()
                 .ForMember(dst => dst.TeacherName,
                     opt => opt.MapFrom(src => src.Teacher.FirstName + " " + src.Teacher.LastName));
+            CreateMap<Grade, LessonToAddDto>()
+                .ForMember(dst => dst.TeacherName,
+                    opt => opt.MapFrom(src => src.Lesson.Teacher.FirstName + " " + src.Lesson.Teacher.LastName))
+                .ForMember(dst => dst.Repetition, opt => opt.MapFrom(src => src.NumberOfLessonTaken > 1 ? true : false))
+                .ForMember(dst => dst.Akts, opt => opt.MapFrom(src => src.Lesson.Akts))
+                .ForMember(dst => dst.LessonCode, opt => opt.MapFrom(src => src.Lesson.LessonCode))
+                .ForMember(dst => dst.LessonName, opt => opt.MapFrom(src => src.Lesson.LessonName))
+                .ForMember(dst => dst.TheoryTime, opt => opt.MapFrom(src => src.Lesson.TheoryTime))
+                .ForMember(dst => dst.PracticeTime, opt => opt.MapFrom(src => src.Lesson.PracticeTime));
+
+
             CreateMap<LessonToAddDto, LessonToAddDto>()
                 .ForMember(dst => dst.Repetition, opt => opt.MapFrom(src => true));
 
@@ -142,14 +153,6 @@ namespace API.Helpers
 
             CreateMap<UpdateStudentDto, StudentInformation>()
                 .ForAllMembers(opt => opt.MapFrom<UpdateValueResolver>());
-
-
-
-
-
-
-
-
         }
     }
 }
