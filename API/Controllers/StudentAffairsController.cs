@@ -1,12 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using API.Dtos;
 using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
-using Core.Specification;
-using Core.Specification.SemesterSpecs;
 using Core.Specification.UpdateSpecs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -105,6 +104,17 @@ namespace API.Controllers
 
             await _unitOfWork.Complete();
             return Ok();
+        }
+
+        [HttpGet("get-update-params")]
+        public async Task<Dtos.ResponseDto.UpdateStudentDto> GetUpdateParamsAsync()
+        {
+            return new Dtos.ResponseDto.UpdateStudentDto
+            {
+                Faculties = (await _unitOfWork.Repository<Faculty>().ListAllAsync()).Select(_mapper.Map<FacultiesDto>).ToList(),
+                StudyPrograms = (await _unitOfWork.Repository<StudyProgram>().ListAllAsync()).Select(_mapper.Map<StudyProgramDto>).ToList(),
+                Teachers = (await _unitOfWork.Repository<Teacher>().ListAllAsync()).Select(_mapper.Map<TeacherBasicDto>).ToList()
+            };
         }
 
         private async Task<ActionResult> PhotoRepository(IFormFile fileToCome, Student student)
