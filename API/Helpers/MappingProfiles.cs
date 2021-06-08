@@ -158,6 +158,12 @@ namespace API.Helpers
 
             CreateMap<Faculty, FacultiesDto>();
 
+            CreateMap<Student, StudentBasicDto>()
+                .ForMember(dst => dst.StudentNumber, opt => opt.MapFrom(src => src.SchoolNumber))
+                .ForMember(dst => dst.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
+                .ForMember(dst => dst.StudyPrograms,
+                    opt => opt.MapFrom(src => src.Information.StudyProgram.ProgramName));
+
         }
     }
 }

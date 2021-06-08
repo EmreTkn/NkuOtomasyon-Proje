@@ -23,7 +23,7 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private IStudentService _studentService;
+        private readonly IStudentService _studentService;
 
 
         public LessonController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager, IStudentService studentService)

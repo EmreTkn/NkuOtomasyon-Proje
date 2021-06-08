@@ -1,15 +1,19 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Dtos.ResponseDto;
 using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces;
+using Core.Specification.StudentSpecs;
 using Core.Specification.UpdateSpecs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using UpdateStudentDto = API.Dtos.UpdateStudentDto;
 
 namespace API.Controllers
 {
@@ -115,6 +119,15 @@ namespace API.Controllers
                 StudyPrograms = (await _unitOfWork.Repository<StudyProgram>().ListAllAsync()).Select(_mapper.Map<StudyProgramDto>).ToList(),
                 Teachers = (await _unitOfWork.Repository<Teacher>().ListAllAsync()).Select(_mapper.Map<TeacherBasicDto>).ToList()
             };
+        }
+
+        [HttpGet("get-all-students")]
+        public async Task<ActionResult<IReadOnlyList<StudentBasicDto>>> GetAllStudentAsync()
+        {
+            var spec = new StudentListSpecification();
+            return (await _unitOfWork.Repository<Student>().ListAsync(spec))
+                .Select(_mapper.Map<StudentBasicDto>)
+                .ToList();
         }
 
         private async Task<ActionResult> PhotoRepository(IFormFile fileToCome, Student student)
