@@ -85,28 +85,30 @@ export default class StudentUpdate extends Component {
     }
 
     async updatePhoto(photoUrl){
-         const requestOptions = {
-             method: 'POST',
-             headers: { 
-                  // 'Authorization': `Bearer `+this.state.token,
-                 'Content-Type': 'application/json',
-             },
-             body: JSON.stringify({ 
-                fileToCome  : photoUrl,
-                studentNumber: this.state.studentNumber
-             })
-         };
-   
-         const response = await fetch(process.env.REACT_APP_BASE_URL+'studentaffairs/upload-photo', requestOptions);
 
-         if(response.ok){
-             const res = await response.json();
-             alert(res.message)
-         }
-         else{
-             const res = await response.json();
-             alert(res.message)
-         }
+        var formdata = new FormData();    
+        formdata.append("fileToCome", photoUrl);
+        // formdata.append("studentNumber", this.state.studentNumber);
+
+      const requestOptions = {
+          method: 'POST',
+          headers: { 
+               // 'Authorization': `Bearer `+this.state.token,
+              'Content-Type': 'application/json',
+          },
+          body: formdata
+      };
+   
+      const response = await fetch(process.env.REACT_APP_BASE_URL+'studentaffairs/upload-photo?studentNumber='+this.state.studentNumber, requestOptions);
+
+      if(response.ok){
+          const res = await response.json();
+          alert(res.message)
+      }
+      else{
+          const res = await response.json();
+          alert(res.message)
+      }
    }
 
     render() {
@@ -119,16 +121,18 @@ export default class StudentUpdate extends Component {
                          <div className="w-100 d-flex justify-content-center align-items-center">
                              <img src={logo} style={{"width" : "100px"}} alt={"logo"}></img>
                          </div>
+                         <form >
+                            <div class="form-group">
+                                <label htmlFor="updatePhoto">Profil Fotoğrafı Değiştirme</label>
+                                <input type="file" class="form-control-file" id="updatePhoto"  onChange={(e) => this.updatePhoto(e.target.value)}></input>
+                            </div>
+                        </form>
                          <div class="form-group">
-                            <label for="updatePhoto">Profil Fotoğrafı Değiştirme</label>
-                            <input type="file" class="form-control-file" id="updatePhoto"  onChange={(e) => this.updatePhoto(e.target.value)}></input>
-                        </div>
-                         <div class="form-group">
-                            <label for="formstudentNumber">Lütfen Öğrenci No Giriniz</label>
+                            <label htmlFor="formstudentNumber">Lütfen Öğrenci No Giriniz</label>
                             <input type="text" className="form-control" id="formstudentNumber"  onChange={(e) => this.setState({formstudentNumber :e.target.value})}></input>
                          </div>
                          <div class="form-group">
-                            <label for="egitimtipi">Lütfen Semester Seçiniz</label>
+                            <label htmlFor="egitimtipi">Lütfen Semester Seçiniz</label>
                             <select  className="form-control" id="egitimtipi"  onChange={(e) => this.setState({semesterId:parseInt(e.target.value)})}>
                             <option>-</option>
                             <option value={1}>1. Semester</option>
@@ -142,7 +146,7 @@ export default class StudentUpdate extends Component {
                             </select>
                          </div>
                          <div class="form-group">
-                            <label for="egitimtipi">Lütfen Eğitim Tipi Seçiniz</label>
+                            <label htmlFor="egitimtipi">Lütfen Eğitim Tipi Seçiniz</label>
                             <select  className="form-control" id="egitimtipi"  onChange={(e) => this.setState({educationType:parseInt(e.target.value)})}>
                             <option>-</option>
                             <option value={0}>AssociateDegree</option>
@@ -151,7 +155,7 @@ export default class StudentUpdate extends Component {
                             </select>
                          </div>
                          <div class="form-group">
-                            <label for="studyTimeId">Lütfen Eğitim Zamanını Seçiniz</label>
+                            <label htmlFor="studyTimeId">Lütfen Eğitim Zamanını Seçiniz</label>
                             <select  className="form-control" id="studyTimeId"  onChange={(e) => this.setState({studyTimeId:parseInt(e.target.value)})}>
                                 <option>-</option>
                                 <option value={1}>Birinci Öğretim</option>
@@ -159,7 +163,7 @@ export default class StudentUpdate extends Component {
                             </select>
                          </div>
                          <div class="form-group">
-                            <label for="ogretmen">Lütfen Öğretmen Seçiniz</label>
+                            <label htmlFor="ogretmen">Lütfen Öğretmen Seçiniz</label>
                             <select  className="form-control" id="ogretmen"  onChange={(e) => this.setState({advisorTeacherId:e.target.value})}>
                             <option>-</option>
                             {Object.values(this.state.teachers).map((teacher) =>
@@ -168,7 +172,7 @@ export default class StudentUpdate extends Component {
                             </select>
                          </div>
                         <div class="form-group">
-                            <label for="fakulte">Lütfen Fakülte Seçiniz</label>
+                            <label htmlFor="fakulte">Lütfen Fakülte Seçiniz</label>
                             <select  className="form-control" id="fakulte"  onChange={(e) => this.setState({facultyId:parseInt(e.target.value)})}>
                             <option>-</option>
                             {Object.values(this.state.faculties).map((faculty) =>
@@ -177,7 +181,7 @@ export default class StudentUpdate extends Component {
                             </select>
                          </div>
                          <div class="form-group">
-                            <label for="program">Lütfen Öğrenim Programı Seçiniz</label>
+                            <label htmlFor="program">Lütfen Öğrenim Programı Seçiniz</label>
                             <select  className="form-control" id="program"  onChange={(e) => this.setState({studyProgramId:parseInt(e.target.value)})}>
                                 <option>-</option>
                             {Object.values(this.state.studyPrograms).map((study) =>
@@ -186,7 +190,7 @@ export default class StudentUpdate extends Component {
                             </select>
                          </div>
                          <div class="form-group">
-                            <label for="recordType">Lütfen Kayıt Tipini Seçiniz</label>
+                            <label htmlFor="recordType">Lütfen Kayıt Tipini Seçiniz</label>
                             <select  className="form-control" id="recordType"  onChange={(e) => this.setState({recordType:parseInt(e.target.value)})}>
                                 <option>-</option>
                                 <option value={0}>DGS</option>
@@ -195,23 +199,23 @@ export default class StudentUpdate extends Component {
                             </select>
                          </div>
                          <div class="form-group">
-                            <label for="gradeAverage">Lütfen Genel Ortalama Giriniz</label>
+                            <label htmlFor="gradeAverage">Lütfen Genel Ortalama Giriniz</label>
                             <input type="number" className="form-control" id="gradeAverage" placeholder="Genel Ortalama"  onChange={(e) => this.setState({gradeAverage :parseFloat(e.target.value)})}></input>
                          </div>
                          <div class="form-group">
-                            <label for="comeFromUniversity">Lütfen Geldiği Üniversiteyi Giriniz</label>
+                            <label htmlFor="comeFromUniversity">Lütfen Geldiği Üniversiteyi Giriniz</label>
                             <input type="text" className="form-control" id="comeFromUniversity" placeholder="Geldiği Universite"  onChange={(e) => this.setState({comeFromUniversity :e.target.value})}></input>
                          </div>
                          <div class="form-group">
-                            <label for="comeFromFaculty">Lütfen Geldiği Fakülteyi Giriniz</label>
+                            <label htmlFor="comeFromFaculty">Lütfen Geldiği Fakülteyi Giriniz</label>
                             <input type="text" className="form-control" id="comeFromFaculty" placeholder="Geldiği Fakülte"  onChange={(e) => this.setState({comeFromFaculty :e.target.value})}></input>
                          </div>
                          <div class="form-group">
-                            <label for="comeFromBranch">Lütfen Geldiği Bölümü Giriniz</label>
+                            <label htmlFor="comeFromBranch">Lütfen Geldiği Bölümü Giriniz</label>
                             <input type="text" className="form-control" id="comeFromBranch" placeholder="Geldiği Bölüm"  onChange={(e) => this.setState({comeFromBranch :e.target.value})}></input>
                          </div>
                          <div class="form-group">
-                            <label for="graduationYear">Lütfen Mezun Olma Tarihi Giriniz</label>
+                            <label htmlFor="graduationYear">Lütfen Mezun Olma Tarihi Giriniz</label>
                             <input type="date" className="form-control" id="graduationYear" placeholder="Mezun Olma Tarihi"  onChange={(e) => this.setState({graduationYear :e.target.value})}></input>
                          </div>
                         <br/>
