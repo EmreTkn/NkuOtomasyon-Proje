@@ -9,5 +9,10 @@ namespace Core.Specification.StudentSpecs
             AddInclude(src => src.Information.StudyProgram);
             AddOrderBy(src => src.Information.StudyProgram.ProgramName);   
         }
+
+        public StudentListSpecification(string studentNumber) : base(src => src.SchoolNumber == studentNumber)
+        {
+            AddInclude(src => src.PersonalityInformation);
+        }
     }
 }

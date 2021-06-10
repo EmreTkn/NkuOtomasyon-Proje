@@ -34,24 +34,6 @@ namespace API.Controllers
             _studentService = studentService;
         }
 
-        [HttpGet("get-lesson-params")]
-        public async Task<AddLessonDto> GetAllParamsForAddLessonAsync()
-        {
-            var lessonParams = new AddLessonDto
-            {
-                ClassRooms = (await _unitOfWork.Repository<Classroom>().ListAllAsync())
-                    .Select(_mapper.Map<ClassRoomDto>).ToList(),
-                Programs = (await _unitOfWork.Repository<StudyProgram>().ListAllAsync())
-                    .Select(_mapper.Map<StudyProgramDto>).ToList(),
-                Semesters = (await _unitOfWork.Repository<Semester>().ListAllAsync())
-                    .Select(_mapper.Map<SemesterDto>).ToList(),
-                Teachers = (await _unitOfWork.Repository<Teacher>().ListAllAsync())
-                    .Select(_mapper.Map<TeacherDto>).ToList()
-            };
-
-            return lessonParams;
-        }
-
         [HttpGet("get-grade-cards")]
         public async Task<ActionResult<IReadOnlyList<GradeCardDto>>> GetGradeCardsAsync()
         {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Core.Entities;
+﻿using Core.Entities;
 
 namespace Core.Specification.StudentSpecs
 {
@@ -11,5 +8,6 @@ namespace Core.Specification.StudentSpecs
         {
             AddInclude(x => x.Student);
         }
+
     }
 }

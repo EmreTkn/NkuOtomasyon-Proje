@@ -1,9 +1,12 @@
 ﻿using System;
 using API.Dtos;
+using API.Dtos.RequestDto;
 using API.Dtos.ResponseDto;
 using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
+using Microsoft.Extensions.ObjectPool;
+using PersonalInformationDto = API.Dtos.ResponseDto.PersonalInformationDto;
 
 
 namespace API.Helpers
@@ -45,7 +48,8 @@ namespace API.Helpers
                 .ForMember(dst => dst.EducationType, opt => opt.MapFrom(src => src.EducationType.ToString()))
                 .ForMember(dst => dst.Semester, opt => opt.MapFrom(src => src.Semester.SemesterName))
                 .ForMember(dst => dst.Faculty, opt => opt.MapFrom(src => src.Faculty.FacultyName))
-                .ForMember(dst => dst.StudyProgram, opt => opt.MapFrom(src => src.StudyProgram.ProgramName));
+                .ForMember(dst => dst.StudyProgram, opt => opt.MapFrom(src => src.StudyProgram.ProgramName))
+                .ForMember(dst => dst.SchoolNumber, opt => opt.MapFrom(src => src.Student.SchoolNumber));
 
             CreateMap<Grade, GradeCardDto>()
                 .ForMember(dst => dst.TeacherName,
@@ -134,6 +138,9 @@ namespace API.Helpers
                 .ForMember(dst => dst.TheoryTime, opt => opt.MapFrom(src => src.Lesson.TheoryTime))
                 .ForMember(dst => dst.PracticeTime, opt => opt.MapFrom(src => src.Lesson.PracticeTime));
 
+            CreateMap<Lesson, API.Dtos.LessonDto>()
+                .ForMember(dst => dst.TeacherName,
+                    opt => opt.MapFrom(src => src.Teacher.FirstName + " " + src.Teacher.LastName));
 
             CreateMap<LessonToAddDto, LessonToAddDto>()
                 .ForMember(dst => dst.Repetition, opt => opt.MapFrom(src => true));
@@ -164,6 +171,15 @@ namespace API.Helpers
                 .ForMember(dst => dst.StudyPrograms,
                     opt => opt.MapFrom(src => src.Information.StudyProgram.ProgramName));
 
+            CreateMap<Dtos.RequestDto.PersonalInformationDto, StudentPersonalityInformation>()
+                .ForMember(dst => dst.MaritalStatus,
+                    opt => opt.MapFrom(src => (MaritalStatus) Enum.Parse(typeof(MaritalStatus), src.MaritalStatus)))
+                .ForMember(dst => dst.Gender,
+                    opt => opt.MapFrom(src => (Gender) Enum.Parse(typeof(Gender), src.Gender)));
+
+            CreateMap<Classroom, ClassRoomDto>();
+
+            CreateMap<LessonAddDto, Lesson>();
         }
     }
 }

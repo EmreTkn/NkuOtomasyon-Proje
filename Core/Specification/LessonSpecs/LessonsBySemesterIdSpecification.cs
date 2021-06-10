@@ -8,5 +8,11 @@ namespace Core.Specification.LessonSpecs
         {
             
         }
+
+        public LessonsBySemesterIdSpecification()
+        {
+            AddInclude(src => src.Teacher);
+            AddOrderBy(src => src.Semester.Id);
+        }
     }
 }
