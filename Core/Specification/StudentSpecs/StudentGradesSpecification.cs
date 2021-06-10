@@ -10,5 +10,12 @@ namespace Core.Specification.StudentSpecs
             AddInclude(x => x.Lesson.Semester);
             AddInclude(x => x.Lesson.Teacher);
         }
+
+        public StudentGradesSpecification(string studentId, int semesterId) 
+            : base(src => src.SemesterId == semesterId && src.Student.Id == studentId)
+        {
+            AddInclude(src => src.Lesson);
+            AddInclude(src => src.Lesson.Teacher);
+        }
     }
 }

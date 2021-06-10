@@ -138,7 +138,7 @@ namespace API.Helpers
                 .ForMember(dst => dst.TheoryTime, opt => opt.MapFrom(src => src.Lesson.TheoryTime))
                 .ForMember(dst => dst.PracticeTime, opt => opt.MapFrom(src => src.Lesson.PracticeTime));
 
-            CreateMap<Lesson, API.Dtos.LessonDto>()
+            CreateMap<Lesson, Dtos.LessonDto>()
                 .ForMember(dst => dst.TeacherName,
                     opt => opt.MapFrom(src => src.Teacher.FirstName + " " + src.Teacher.LastName));
 
@@ -180,6 +180,8 @@ namespace API.Helpers
             CreateMap<Classroom, ClassRoomDto>();
 
             CreateMap<LessonAddDto, Lesson>();
+
+            CreateMap<PdfFile, Dtos.ResponseDto.PdfDto>();
         }
     }
 }

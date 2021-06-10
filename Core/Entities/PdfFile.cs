@@ -1,5 +1,4 @@
-﻿using Core.Entities.Identity;
-
+﻿
 namespace Core.Entities
 {
     public class PdfFile

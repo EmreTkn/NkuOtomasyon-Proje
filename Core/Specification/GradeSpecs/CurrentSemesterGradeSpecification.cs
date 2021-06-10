@@ -21,7 +21,7 @@ namespace Core.Specification.GradeSpecs
                         src.Student.Id == studentId &&
                         src.Lesson.LessonCode == lessonCode)
         {
-            
+            AddInclude(src => src.Lesson);
         }
 
     }
