@@ -26,7 +26,8 @@ export default class App extends Component {
       user: '',
       email: '',
       newPasswordToken: '',
-      newPasswordEmail: ''
+      newPasswordEmail: '',
+      studentNumberForAdmin: ''
     };
   }
 
@@ -94,6 +95,24 @@ export default class App extends Component {
         path: '/student/derseklekaldir',
         name: 'Ders Ekle/Kaldır'
       }
+    ];
+    const adminSidebar = [
+      {
+        path: '/admin/students',
+        name: 'Öğrenci Listesi'
+      },
+      {
+        path: '/admin/teachers',
+        name: 'Öğretmen Listesi'
+      },
+      {
+        path: '/admin/lessons',
+        name: 'Ders Listesi'
+      },
+      {
+        path: '/sifredegistir',
+        name: 'Şifre Değiştirme'
+      },
     ]
     
     return (
@@ -118,6 +137,14 @@ export default class App extends Component {
           <Route exact path="/student/donemsinavprogramim" render={props => (<StudentPage {... props} user={this.state.user} sidebar={studentSidebar} contentPage={'donemsinavprogramim'} loggedIn={this.state.loggedIn}/>)} />
           <Route exact path="/student/donemdersnotlarim" render={props => (<StudentPage {... props} user={this.state.user} sidebar={studentSidebar} contentPage={'donemdersnotlarim'} loggedIn={this.state.loggedIn}/>)} />
           <Route exact path="/student/derseklekaldir" render={props => (<StudentPage {... props} user={this.state.user} sidebar={studentSidebar} contentPage={'derseklekaldir'} loggedIn={this.state.loggedIn}/>)} />
+
+
+          {/* ADMIN PAGE */}
+          <Route exact path="/admin" render={props => (<AdminPage {... props} user={this.state.user} sidebar={adminSidebar} loggedIn={this.state.loggedIn}/>)} />
+          <Route exact path="/admin/students" render={props => (<AdminPage {... props}  user={this.state.user} sidebar={adminSidebar} contentPage={'adminstudents'} loggedIn={this.state.loggedIn}/>)} />
+          <Route exact path="/admin/students/update" render={props => (<AdminPage {... props} user={this.state.user}  sidebar={adminSidebar} contentPage={'adminstudentsupdate'} loggedIn={this.state.loggedIn}/>)} />
+          <Route exact path="/admin/lessons" render={props => (<AdminPage {... props} user={this.state.user} sidebar={adminSidebar} contentPage={'adminlessons'} loggedIn={this.state.loggedIn}/>)} />
+          <Route exact path="/admin/teachers" render={props => (<AdminPage {... props} user={this.state.user} sidebar={adminSidebar} contentPage={'adminteachers'} loggedIn={this.state.loggedIn}/>)} />
 
 
           <script src="https://unpkg.com/react/umd/react.production.min.js"></script>
