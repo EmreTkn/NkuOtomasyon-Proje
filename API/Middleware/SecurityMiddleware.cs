@@ -41,7 +41,7 @@ namespace API.Middleware
                     context.Response.ContentType = "application/json";
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                    var response = new ApiException(401,"Bu sayfaya yalnızca Admin kullanıcı ulaşabilir.");
+                    var response = new ApiResponse(401,"Bu sayfaya yalnızca Admin kullanıcı ulaşabilir.");
                     var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
                     var json = JsonSerializer.Serialize(response, options);
