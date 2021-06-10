@@ -48,5 +48,37 @@ namespace Infrastructure.Services
                 return null;
             }
         }
+
+        public async Task<PdfFile> UploadPdf(string lessonCode, string name, IFormFile fileToCome)
+        {
+            try
+            {
+                if (fileToCome != null && lessonCode != null && name != null)
+                {
+                    using (var stream = fileToCome.OpenReadStream())
+                    {
+                        var uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(fileToCome.Name, stream)
+                        };
+                        var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                        var pdf = new PdfFile
+                        {
+                            LessonCode = lessonCode,
+                            PublicId = uploadResult.PublicId,
+                            Url = uploadResult.Url.ToString(),
+                            Name = name
+                        };
+                        return pdf;
+                    }
+                }
+            }
+            catch 
+            {
+                return null;
+            }
+
+            return null;
+        }
     }
 }

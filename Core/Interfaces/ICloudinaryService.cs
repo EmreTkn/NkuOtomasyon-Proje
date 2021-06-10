@@ -7,5 +7,6 @@ namespace Core.Interfaces
    public interface ICloudinaryService
    {
        Task<Photo> UploadPhoto(string id, IFormFile formFile);
+       Task<PdfFile> UploadPdf(string lessonCode, string name, IFormFile formFile);
    }
 }
