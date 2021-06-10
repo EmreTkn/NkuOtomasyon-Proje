@@ -10,6 +10,7 @@ import HaftalikDersProgrami from '../../components/Student/HaftalikDersProgrami/
 import DonemSinavProgrami from '../../components/Student/DonemSinavProgrami/DonemSinavProgrami'
 import DonemDersNotlari from '../../components/Student/DonemDersNotlari/DonemDersNotlari'
 import DersEkleKaldir from '../../components/Student/DersEkleKaldir/DersEkleKaldir'
+import DersListeleme from '../../components/Student/DersListele/DersListele'
 
 import './StudentPage.css';
 
@@ -44,6 +45,8 @@ export default class StudentPage extends Component {
                 return <DonemDersNotlari  user={props.user}></DonemDersNotlari>;  
             case 'derseklekaldir':
                 return <DersEkleKaldir  user={props.user}></DersEkleKaldir>;  
+            case 'derslistele':
+                return <DersListeleme  user={props.user}></DersListeleme>;  
           default:
             return <OzlukBilgileri  user={props.user}></OzlukBilgileri>;
         }

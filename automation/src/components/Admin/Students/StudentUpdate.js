@@ -30,7 +30,7 @@ export default class StudentUpdate extends Component {
          const requestOptions = {
              method: 'GET',
              headers: {
-                 // 'Authorization': `Bearer `+this.state.token,
+                 'Authorization': `Bearer `+this.state.token,
                  'Content-Type': `application/json`,
              }
          };
@@ -52,7 +52,7 @@ export default class StudentUpdate extends Component {
          const requestOptions = {
              method: 'POST',
              headers: { 
-                  // 'Authorization': `Bearer `+this.state.token,
+                 'Authorization': `Bearer `+this.state.token,
                  'Content-Type': 'application/json',
              },
              body: JSON.stringify({ 
@@ -88,12 +88,11 @@ export default class StudentUpdate extends Component {
 
         var formdata = new FormData();    
         formdata.append("fileToCome", photoUrl);
-        // formdata.append("studentNumber", this.state.studentNumber);
 
       const requestOptions = {
           method: 'POST',
           headers: { 
-               // 'Authorization': `Bearer `+this.state.token,
+              'Authorization': `Bearer `+this.state.token,
               'Content-Type': 'application/json',
           },
           body: formdata
