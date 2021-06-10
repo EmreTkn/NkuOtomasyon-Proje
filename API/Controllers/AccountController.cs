@@ -78,8 +78,6 @@ namespace API.Controllers
                 Type = registerDto.Type
             };
 
-
-
             var result =await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded)
             {
@@ -91,9 +89,10 @@ namespace API.Controllers
                 _unitOfWork.Repository<Student>().Add(_mapper.Map<User,Student>(user));
             }
             else if (user.Type == Types.Teacher)
-            {
+            { 
                 _unitOfWork.Repository<Teacher>().Add(_mapper.Map<User,Teacher>(user));
-            }else if (user.Type == Types.StudentAffairs)
+            }
+            else if (user.Type == Types.StudentAffairs)
             {
                 _unitOfWork.Repository<StudentAffairs>().Add(_mapper.Map<User,StudentAffairs>(user));
             }
