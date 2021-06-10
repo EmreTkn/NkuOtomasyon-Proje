@@ -125,6 +125,10 @@ export default class App extends Component {
         path: '/sifredegistir',
         name: 'Şifre Değiştirme'
       },
+      {
+        path: '/register',
+        name: 'Kullanıcı Ekle'
+      }
     ];
     const teacherSidebar = [
       {
@@ -134,11 +138,6 @@ export default class App extends Component {
       {
         path: '/sifredegistir',
         name: 'Şifre Değiştirme'
-      },
-      ,
-      {
-        path: '/register',
-        name: 'Kullanıcı Ekle'
       }
     ];
     return (
