@@ -41,7 +41,7 @@ export default class DersListele extends Component {
          
         if(response.ok){
             const res = await response.json();
-            alert(res.message)
+            window.open(res[0].url, "_blank")
         }
         else{
             const res = await response.json();

@@ -12,7 +12,7 @@ export default class AdminPage extends Component {
     constructor(props){
         super(props);
         this.state = {
-            userName: 'Caan',
+            userName: this.props.name,
             studentNumberForAdmin: '',
             lessonNumberForAdmin: '',
             sidebar: this.props.sidebar,

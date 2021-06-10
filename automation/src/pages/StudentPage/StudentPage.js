@@ -19,7 +19,7 @@ export default class StudentPage extends Component {
         super(props);
         this.state = {
             // content = this.props.pageContent,
-            userName: 'Caan'
+            userName: this.props.name,
         }
     }
     componentDidMount() {
