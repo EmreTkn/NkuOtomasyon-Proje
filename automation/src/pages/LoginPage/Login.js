@@ -28,6 +28,7 @@ export default class Login extends Component {
             localStorage.setItem("authToken", res.token)
             localStorage.setItem("authRole", res.type)
             localStorage.setItem("authMail", res.email)
+            localStorage.setItem("authName", res.email)
             this.handleSuccessfullAuth(res);
         }
         else{

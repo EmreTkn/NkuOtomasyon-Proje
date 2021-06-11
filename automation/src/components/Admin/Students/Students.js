@@ -15,7 +15,7 @@ export default class Students extends Component {
         const requestOptions = {
             method: 'GET',
             headers: {
-                // 'Authorization': `Bearer `+this.state.token,
+                'Authorization': `Bearer `+this.state.token,
                 'Content-Type': `application/json`,
             }
         };
@@ -31,8 +31,8 @@ export default class Students extends Component {
      }
 
      handleGoUpdatePage(studentNumber){
-         this.props.takeStudentNumber(studentNumber);
-    }
+          this.props.takeStudentNumber(studentNumber);
+     }
 
     render() {
         return (
@@ -56,7 +56,7 @@ export default class Students extends Component {
                                 <td>{student.fullName}</td>
                                 <td>{student.studentNumber}</td>
                                 <td>{student.studyPrograms}</td>
-                                <td><button className="btn btn-lg btn-secondary fw-bold border-white bg-white" type="submit" onClick={(e) => this.handleGoUpdatePage(student.studentNumber)} >Düzenle</button></td>
+                                 <td><button className="btn btn-lg btn-secondary fw-bold border-white bg-white" type="submit" onClick={(e) => this.handleGoUpdatePage(student.studentNumber)} >Düzenle</button></td>
                                 </tr>
                         )}
                 </tbody>
