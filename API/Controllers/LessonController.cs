@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Dtos;
 using API.Dtos.ResponseDto;
 using API.Errors;
 using API.Extensions;
@@ -242,7 +241,6 @@ namespace API.Controllers
                         Student = educationInformation.Student
                     });
                 }
-
             }
 
             if (!status)

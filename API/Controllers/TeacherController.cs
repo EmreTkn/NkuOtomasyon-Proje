@@ -96,7 +96,6 @@ namespace API.Controllers
                     if (model.MakeUpExam != null) grade.MakeUpExam = model.MakeUpExam;
                     grade.FailedAbsenteeism = model.FailedAbsenteeism;
                     grade.FailedLowGrade = model.FailedLowGrade;
-
                     _unitOfWork.Repository<Grade>().Update(grade);
                     await _unitOfWork.Complete();
                     return Ok(new ApiResponse(200, "Not başarı ile güncellendi."));

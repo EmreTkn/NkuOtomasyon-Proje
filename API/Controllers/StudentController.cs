@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Dtos.RequestDto;
 using API.Dtos.ResponseDto;
 using API.Errors;
 using API.Extensions;
